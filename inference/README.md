@@ -7,6 +7,10 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 ## Model Preparation
 The first step is to prepare the model for deployment using confidential containers. 
 
+### Create a storage container
+
 ## Service Deployment
+
+### Generate a key release policy 
 
 ## Run Inferencing Requests
