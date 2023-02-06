@@ -1,0 +1,11 @@
+{
+  "containerRegistry": {
+    "value": ""
+  },
+  "ccePolicy": {
+    "value": ""
+  },
+  "EncfsSideCarArgs": {
+    "value": ""
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "containers": [
+    {
+      "containerImage": "$CONTAINER_REGISTRY/triton-inference:latest",
+      "command": [
+        "/bin/bash",
+        "run.sh"
+      ],
+      "environmentVariables": [],
+      "mounts": [
+        {
+          "mountType": "emptyDir",
+          "mountPath": "/mnt/remote",
+          "readonly": false
+        }
+      ]
+    },
+    {
+      "containerImage": "$CONTAINER_REGISTRY/encrypted-filesystem:latest",
+      "environmentVariables": [
+        {
+          "name" : "EncfsSideCarArgs",
+          "value" : ".+",
+          "strategy" : "re2"
+        }
+      ],
+      "command": [
+        "/encfs.sh"
+      ],
+      "mounts": [
+        {
+          "mountType": "emptyDir",
+          "mountPath": "/mnt/remote",
+          "readonly": false
+        }
+      ]
+    }
+  ]
+}
