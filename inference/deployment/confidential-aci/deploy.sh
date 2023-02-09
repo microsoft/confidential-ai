@@ -8,6 +8,7 @@ export ENCRYPTED_FILESYSTEM_INFORMATION=`./generate-encrypted-filesystem-info.sh
 echo Generating parameters for ACI deployment...
 TMP=$(jq '.containerRegistry.value = env.CONTAINER_REGISTRY' aci-parameters-template.json)
 TMP=`echo $TMP | jq '.ccePolicy.value = env.CCE_POLICY'`
+TMP=`echo $TMP | jq '.modelSigningKey.value = env.MODEL_SIGNING_KEY'`
 TMP=`echo $TMP | jq '.EncfsSideCarArgs.value = env.ENCRYPTED_FILESYSTEM_INFORMATION'`
 echo $TMP > /tmp/aci-parameters.json
 

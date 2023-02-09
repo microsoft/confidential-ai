@@ -5,6 +5,9 @@
   "ccePolicy": {
     "value": ""
   },
+  "modelSigningKey": {
+    "value": ""
+  },
   "EncfsSideCarArgs": {
     "value": ""
   }

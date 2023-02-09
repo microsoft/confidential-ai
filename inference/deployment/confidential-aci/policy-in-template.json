@@ -2,10 +2,12 @@
   "version": "1.0",
   "containers": [
     {
-      "containerImage": "$CONTAINER_REGISTRY/triton-inference:latest",
+      "containerImage": "$CONTAINER_REGISTRY/inference-server:latest",
       "command": [
         "/bin/bash",
-        "run.sh"
+        "verify_and_run.sh",
+        "$MODEL_SIGNING_KEY",
+        "/mnt/remote/models"
       ],
       "environmentVariables": [],
       "mounts": [
@@ -17,7 +19,7 @@
       ]
     },
     {
-      "containerImage": "$CONTAINER_REGISTRY/encrypted-filesystem:latest",
+      "containerImage": "$CONTAINER_REGISTRY/encfs:latest",
       "environmentVariables": [
         {
           "name" : "EncfsSideCarArgs",
