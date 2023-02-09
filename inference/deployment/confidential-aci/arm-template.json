@@ -72,7 +72,7 @@
           {
             "name": "covid-training",
             "properties": {
-              "image": "[concat(parameters('containerRegistry'), '/triton-inference:latest')]",
+              "image": "[concat(parameters('containerRegistry'), '/inference-server:latest')]",
               "command": [
                 "/bin/bash",
                 "run.sh"
@@ -94,7 +94,7 @@
           {
             "name": "encrypted-storage-sidecar",
             "properties": {
-              "image": "[concat(parameters('containerRegistry'), '/encrypted-filesystem:latest')]",
+              "image": "[concat(parameters('containerRegistry'), '/encfs:latest')]",
               "command": [
                 "/encfs.sh"
               ],
