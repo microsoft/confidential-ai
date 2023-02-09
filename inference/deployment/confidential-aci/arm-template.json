@@ -70,7 +70,7 @@
         },
         "containers": [
           {
-            "name": "covid-training",
+            "name": "inference-server",
             "properties": {
               "image": "[concat(parameters('containerRegistry'), '/inference-server:latest')]",
               "command": [
