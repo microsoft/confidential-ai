@@ -1,0 +1,89 @@
+static_resources:
+  listeners:
+  # Inbound network traffic listener.
+  - address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 15006
+    listener_filters:
+    - name: "envoy.filters.listener.original_dst"
+      typed_config:
+        "@type": type.googleapis.com/envoy.extensions.filters.listener.original_dst.v3.OriginalDst
+    - name: "envoy.filters.listener.http_inspector"
+      typed_config:
+        "@type": type.googleapis.com/envoy.extensions.filters.listener.http_inspector.v3.HttpInspector
+    - name: "envoy.filters.listener.tls_inspector"
+      typed_config:
+        "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector        
+    filter_chains:
+    - filter_chain_match:
+        transport_protocol: tls
+      transport_socket:
+        name: envoy.transport_sockets.att_tls
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.transport_sockets.att_tls.v3.DownstreamAttTlsContext
+          attested_tls_context:
+            signing_context:
+              certificate:
+                  filename: certs/server-cert.pem
+              private_key:
+                  filename: keys/server-key.pem
+              attestation_token:
+                  filename: attestation-token.txt
+            validation_context:
+              attestation_service_trusted_keys:
+                  filename: attestation-service-key.pem
+              client_attestation_required:
+                  true
+          downstream_tls_context:
+            require_client_certificate: true
+            common_tls_context:
+              tls_params:
+                tls_minimum_protocol_version: TLSv1_3
+              tls_certificates:
+              - certificate_chain:
+                  filename: certs/server-cert.pem
+                private_key:
+                  filename: keys/server-key.pem
+              validation_context:
+                trust_chain_verification: ACCEPT_UNTRUSTED
+      filters:
+      - name: envoy.filters.network.http_connection_manager
+        typed_config: 
+          '@type': "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
+          stat_prefix: inbound_proxy
+          forward_client_cert_details: ALWAYS_FORWARD_ONLY
+          route_config: 
+            name: all
+            virtual_hosts:
+            - name: inbound-pass-through
+              domains: ["*"]
+              routes:
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: inbound-pass-through
+          http_filters:
+          - name: envoy.filters.http.router
+          access_log:
+          - name: envoy.access_loggers.stdout
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+    - filter_chain_match:
+      filters:
+      - name: envoy.filters.network.tcp_proxy
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+          cluster: black-hole
+          stat_prefix: ingress_tcp
+  clusters:
+  - name: inbound-pass-through
+    type: ORIGINAL_DST
+    lb_policy: CLUSTER_PROVIDED
+    upstream_bind_config:
+      source_address:
+        address: 127.0.0.6
+        port_value: 0
+  - name: black-hole
+    type: STRICT_DNS
+    lb_policy: ROUND_ROBIN
