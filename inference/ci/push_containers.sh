@@ -1,4 +1,5 @@
-docker push inference-server:latest $CONTAINER_REGISTRY/inference-server:latest
-docker push inference-proxy:latest $CONTAINER_REGISTRY/inference-proxy:latest
-docker push inference-init:latest $CONTAINER_REGISTRY/inference-init:latest
-docker push encfs:latest $CONTAINER_REGISTRY/encfs:latest
+containers=('inference-server:latest' 'inference-proxy:latest' 'inference-init:latest' 'encfs:latest')
+for container in $containers; do
+  docker tag $container $CONTAINER_REGISTRY"/"$container
+  docker push $CONTAINER_REGISTRY"/"$container
+done
