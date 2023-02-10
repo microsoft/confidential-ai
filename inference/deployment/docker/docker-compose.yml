@@ -8,4 +8,4 @@ services:
       - 8002:8002
     volumes:
       - /home/kapilv/confidential-ai/inference/models/model_repository:/models:ro
-  
+    network_mode: "host"

@@ -16,7 +16,7 @@ az account set --subscription <YOUR_SUBSCRPTION_NAME>
 ```
 Install the latest version of confidential computing extension for Azure CLI. 
 ```
-az extension add 
+az extension add --source https://acccliazext.blob.core.windows.net/confcom/confcom-0.2.9-py3-none-any.whl -y
 ```
 ## Build inferencing service
 Build server-side containers 
