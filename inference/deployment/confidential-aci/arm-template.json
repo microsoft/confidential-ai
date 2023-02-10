@@ -30,7 +30,20 @@
         "description": "The container registry login server."
       }
     },
-    
+    "containerRegistryUsername": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },
+    "containerRegistryPassword": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },    
     "restartPolicy": {
       "defaultValue": "Never",
       "allowedValues": [
