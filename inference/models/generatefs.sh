@@ -9,18 +9,18 @@ while getopts ":d:k:i:" options; do
 done
 
 echo Encrypting $dataPath with key $keyFilePath and generating $encryptedImage
-
 deviceName=cryptdevice1
 deviceNamePath="/dev/mapper/$deviceName"
 
-if [ ! -f $keyFilePath ]
-then 
-  echo "[!] Generating keyfile..."
-  dd if=/dev/random of="$keyFilePath" count=1 bs=32
-    echo "Key in hex string format"
-    python hexstring.py $keyFilePath
-    truncate -s 64 "$keyFilePath"
-fi
+echo "[!] Generating keyfile..."
+
+dd if=/dev/random of="$keyFilePath" count=1 bs=32
+
+echo "Key in hex string format"
+
+python hexstring.py $keyFilePath
+
+truncate -s 64 "$keyFilePath"
 
 echo "[!] Creating encrypted image..."
 
@@ -49,7 +49,7 @@ sudo mount -t ext4 "$deviceNamePath" "$mountPoint" -o loop
 echo "[!] Copying contents to encrypted device..."
 
 # The /* is needed to copy folder contents instead of the folder + contents
-sudo cp -r filesystem/* "$mountPoint"
+sudo cp -r $dataPath/* "$mountPoint"
 sudo rm -rf "$mountPoint/lost+found"
 ls "$mountPoint"
 
