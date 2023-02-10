@@ -2,7 +2,7 @@ ACCOUNT_KEY=$(az storage account keys list --account-name $AZURE_STORAGE_ACCOUNT
 
 az storage blob upload \
   --account-name $AZURE_STORAGE_ACCOUNT_NAME \
-  --container $AZURE_MODEL_CONTAINER_NAME \
+  --container $AZURE_STORAGE_CONTAINER_NAME \
   --file model.img \
   --name model.img \
   --type page \
