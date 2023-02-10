@@ -33,7 +33,7 @@ def sign(private_key_path, data_file_path):
 if __name__ == "__main__":
 
     if len(sys.argv) != 3:
-        print("Usage: python verify.py <path to the private signing key PEM file> <path to the directory containing files>")
+        print("Usage: python sign.py <path to the private signing key PEM file> <path to the directory containing files>")
         sys.exit(-1)
     
     #we shall store all the file names in this list
