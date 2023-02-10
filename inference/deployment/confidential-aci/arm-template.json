@@ -105,7 +105,7 @@
               "image": "[concat(parameters('containerRegistry'), '/inference-server:latest')]",
               "command": [
                 "/bin/bash",
-                "run.sh",
+                "verify_and_run.sh",
                 "[parameters('modelSigningKey')]",
                 "/mnt/remote/models"
               ],
