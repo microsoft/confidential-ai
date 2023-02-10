@@ -1,5 +1,5 @@
 end=`date -u -d "60 minutes" '+%Y-%m-%dT%H:%MZ'`
-ICMR_SAS_TOKEN=$(az storage blob generate-sas --account-name $AZURE_STORAGE_ACCOUNT_NAME --container-name $AZURE_MODEL_CONTAINER_NAME --permissions r --name model.img --expiry $end --only-show-errors) 
+MODEL_SAS_TOKEN=$(az storage blob generate-sas --account-name $AZURE_STORAGE_ACCOUNT_NAME --container-name $AZURE_MODEL_CONTAINER_NAME --permissions r --name model.img --expiry $end --only-show-errors) 
 export MODEL_SAS_TOKEN="$(echo -n $MODEL_SAS_TOKEN | tr -d \")"
 export MODEL_SAS_TOKEN="?$MODEL_SAS_TOKEN"
 

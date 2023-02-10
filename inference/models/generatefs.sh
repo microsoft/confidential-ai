@@ -1,11 +1,11 @@
 #!/bin/bash
 
 while getopts ":d:k:i:" options; do
-	case $options in 
-		d)dataPath=$OPTARG;;
-		k)keyFilePath=$OPTARG;;
-		i)encryptedImage=$OPTARG;;
-	esac
+    case $options in 
+        d)dataPath=$OPTARG;;
+        k)keyFilePath=$OPTARG;;
+        i)encryptedImage=$OPTARG;;
+    esac
 done
 
 echo Encrypting $dataPath with key $keyFilePath and generating $encryptedImage

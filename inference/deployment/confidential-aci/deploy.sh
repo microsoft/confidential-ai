@@ -1,5 +1,8 @@
+#/bin/bash
+export MODEL_SIGNING_KEY=`cat ../../models/signing_public.pem | base64 -w0`
+
 echo Computing CCE policy...
-envsubst < policy-in-template.json > /tmp/policy-in.json
+envsubst < ../../policy/policy-in-template.json > /tmp/policy-in.json
 export CCE_POLICY=$(az confcom acipolicygen -i /tmp/policy-in.json)
 
 echo Generating encrypted file system information...
@@ -11,6 +14,7 @@ TMP=`echo $TMP | jq '.ccePolicy.value = env.CCE_POLICY'`
 TMP=`echo $TMP | jq '.modelSigningKey.value = env.MODEL_SIGNING_KEY'`
 TMP=`echo $TMP | jq '.EncfsSideCarArgs.value = env.ENCRYPTED_FILESYSTEM_INFORMATION'`
 echo $TMP > /tmp/aci-parameters.json
+exit 1
 
 az deployment group create \
   --resource-group $AZURE_TRAINING_RESOURCE_GROUP \
