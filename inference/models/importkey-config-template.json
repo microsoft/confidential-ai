@@ -10,25 +10,14 @@
           "bearer_token": ""
       }
   },
-  "release_policy":
-  {
-    "version" : "0.2",
-    "anyOf": 
-    [
-      {
-        "authority": "https://sharedneu.neu.attest.azure.net",
-        "allOf":
-        [
-          {
-            "claim": "x-ms-sevsnpvm-hostdata",
-            "equals": ""
-          },
-          {
-            "claim": "x-ms-sevsnpvm-launchmeasurement",
-            "equals": "ede826880a4e1a41898a96810efb09f2070513abb355e89652564cd18f1d43a7a031d1ff54490dbd61687de101b66ed1"
-          }
-        ]
-      }
-    ]
-  }
+  "claims": [
+    [{
+      "claim": "x-ms-sevsnpvm-hostdata",
+      "equals": ""
+    },
+    {
+      "claim": "x-ms-sevsnpvm-launchmeasurement",
+      "equals": "ede826880a4e1a41898a96810efb09f2070513abb355e89652564cd18f1d43a7a031d1ff54490dbd61687de101b66ed1"
+    }]
+  ]
 }

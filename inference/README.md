@@ -3,7 +3,10 @@
 This sample demonstrates Confidential Inferencing using Confidential Containers on ACI. 
 
 ## Prerequisites
+- Azure subscription
+- Ubuntu 20.04 (not tested on 22.04)
 - Azure CLI
+- go 
 
 ## Setup
 Edit environment variables in env.sh, and login into your azure subscrption. 
@@ -11,8 +14,11 @@ Edit environment variables in env.sh, and login into your azure subscrption.
 az login
 az account set --subscription <YOUR_SUBSCRPTION_NAME>
 ```
-
-## Building Inferencing Service
+Install the latest version of confidential computing extension for Azure CLI. 
+```
+az extension add 
+```
+## Build inferencing service
 Build server-side containers 
 ```
 ./ci/build_server.sh
@@ -27,31 +33,36 @@ az acr login $CONTAINER_REGISTRY
 ## Model Preparation
 Place the models you would like to serve under the ```models/model_repository``` folder. You can use the following script to fetch samples models.
 ```
-./models/fetch_models.sh
+cd models
+./fetch_models.sh
 ```
 
 ### Sign and Encrypt Models
 Use the following script to sign and encrypt models using fresh keys. The keys are stored locally. 
 ```
-./models/sign_and_encrypt_models.sh
+./sign_and_encrypt_models.sh
 ```
 
 ### Upload models
 Create a resource group, storage account and blob storage containers to store your models. This is a one time step.
 ```
-./models/create_storage_container.sh
+./create_storage_container.sh
 ```
 Upload encrypt model to storage container. 
 ```
-./models/upload_encrypted_models.sh
+./upload_encrypted_models.sh
 ```
 
 ### Provision keys to Azure Key Vault
 ```
-./models/import_keys.sh
+./import_keys.sh
 ```
 ## Service Deployment
 
+```
+cd ../deployment
+./deploy.sh
+```
 ## Client Setup
 
 ## Run Inferencing Requests
