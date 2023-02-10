@@ -24,9 +24,15 @@ truncate -s 64 "$keyFilePath"
 
 echo "[!] Creating encrypted image..."
 
+response=`du -s $dataPath`
+read -ra arr <<< "$response"
+size=`echo "x=l($arr)/l(2); scale=0; 2^((x+0.5)/1)*2" | bc -l;`
+size=$size"K"
+echo "Model repository size: $size"
+
 rm -f "$encryptedImage"
 touch "$encryptedImage"
-truncate --size 64M "$encryptedImage"
+truncate --size $size "$encryptedImage"
 
 sudo cryptsetup luksFormat --type luks2 "$encryptedImage" \
     --key-file "$keyFilePath" -v --batch-mode --sector-size 4096 \
