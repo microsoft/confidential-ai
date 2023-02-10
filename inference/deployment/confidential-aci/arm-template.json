@@ -106,7 +106,7 @@
               "command": [
                 "/bin/bash",
                 "run.sh",
-                "parameters('modelSigningKey')",
+                "[parameters('modelSigningKey')]",
                 "/mnt/remote/models"
               ],
               "volumeMounts": [
