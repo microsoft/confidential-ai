@@ -10,6 +10,8 @@ export ENCRYPTED_FILESYSTEM_INFORMATION=`./generate-encrypted-filesystem-info.sh
 
 echo Generating parameters for ACI deployment...
 TMP=$(jq '.containerRegistry.value = env.CONTAINER_REGISTRY' aci-parameters-template.json)
+TMP=`echo $TMP | jq '.containerRegistryUsername.value = env.CONTAINER_REGISTRY_USERNAME'`
+TMP=`echo $TMP | jq '.containerRegistryPassword.value = env.CONTAINER_REGISTRY_PASSWORD'`
 TMP=`echo $TMP | jq '.ccePolicy.value = env.CCE_POLICY'`
 TMP=`echo $TMP | jq '.modelSigningKey.value = env.MODEL_SIGNING_KEY'`
 TMP=`echo $TMP | jq '.EncfsSideCarArgs.value = env.ENCRYPTED_FILESYSTEM_INFORMATION'`
@@ -20,8 +22,8 @@ az deployment group create \
   --template-file arm-template.json \
   --parameters @/tmp/aci-parameters.json
 
-rm /tmp/aci-parameters.json
-rm /tmp/policy-in.json
+# rm /tmp/aci-parameters.json
+# rm /tmp/policy-in.json
 
 echo Deployment complete. 
 

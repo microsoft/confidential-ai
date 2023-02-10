@@ -30,6 +30,7 @@
         "description": "The container registry login server."
       }
     },
+    
     "restartPolicy": {
       "defaultValue": "Never",
       "allowedValues": [
@@ -64,6 +65,15 @@
       }
     }
   },
+  "variables": {
+    "imageRegistryCredentials": [
+      {
+        "server": "[parameters('containerRegistry')]",
+        "username": "[parameters('containerRegistryUsername')]",
+        "password": "[parameters('containerRegistryPassword')]"
+      }
+    ]
+  },  
   "resources": [
     {
       "type": "Microsoft.ContainerInstance/containerGroups",
@@ -135,7 +145,8 @@
             "name": "remotemounts",
             "emptydir": {}
           }
-        ]
+        ],
+        "imageRegistryCredentials": "[if(equals(parameters('containerRegistryUsername'),''), json('null'), variables('imageRegistryCredentials'))]"
       }
     }
   ]
