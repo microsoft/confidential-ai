@@ -5,7 +5,7 @@
       "containerImage": "$CONTAINER_REGISTRY/inference-server:latest",
       "command": [
         "/bin/bash",
-        "verify_and_run.sh",
+        "/opt/verify/verify_and_run.sh",
         "$MODEL_SIGNING_KEY",
         "/mnt/remote/models"
       ],

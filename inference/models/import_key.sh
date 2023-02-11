@@ -27,6 +27,3 @@ pushd .
 cd $TOOLS_HOME/importkey
 go run main.go -c /tmp/importkey-config.json -kh $MODEL_KEY
 popd
-
-# rm /tmp/policy-in.json
-# rm /tmp/importkey-config.json
