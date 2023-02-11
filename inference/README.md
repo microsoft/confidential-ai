@@ -55,7 +55,7 @@ Upload encrypt model to storage container.
 
 ### Provision keys to Azure Key Vault
 ```
-./import_keys.sh
+./import_key.sh
 ```
 ## Service Deployment
 
