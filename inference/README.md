@@ -4,12 +4,15 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 
 ## Prerequisites
 - Azure subscription
+- Azure Key Vault mHSM instance
 - Ubuntu 20.04 (not tested on 22.04)
 - Azure CLI
 - go 
 
 ## Setup
-Edit environment variables in env.sh, and login into your azure subscrption. 
+Edit environment variables in env.sh. The AZURE_MSHM_ENDPOINT must point to an AKV mHSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned. 
+
+Next, login into your azure subscrption. 
 ```
 az login
 az account set --subscription <YOUR_SUBSCRPTION_NAME>
@@ -38,17 +41,17 @@ cd models
 ```
 
 ### Sign and Encrypt Models
-Use the following script to sign and encrypt models using fresh keys. The keys are stored locally. 
+Use the following script to sign and encrypt models using fresh keys. 
 ```
 ./sign_and_encrypt_models.sh
 ```
 
 ### Upload models
-Create a resource group, storage account and blob storage containers to store your models. This is a one time step.
+Create a resource group, storage account and blob storage containers to store your encrypted models.
 ```
 ./create_storage_container.sh
 ```
-Upload encrypt model to storage container. 
+Upload encrypted models to storage container. 
 ```
 ./upload_encrypted_models.sh
 ```
