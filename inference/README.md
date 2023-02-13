@@ -24,19 +24,20 @@ az extension add --source https://acccliazext.blob.core.windows.net/confcom/conf
 ## Build inferencing service
 Build server-side containers 
 ```
-./ci/build_server.sh
+cd ci
+./build_server.sh
 ```
 
 Push containers to container registry
 ```
 az acr login $CONTAINER_REGISTRY
-./ci/push_containers.sh
+./push_containers.sh
 ```
 
 ## Model Preparation
 Place the models you would like to serve under the ```models/model_repository``` folder. You can use the following script to fetch samples models.
 ```
-cd models
+cd ../models
 ./fetch_models.sh
 ```
 
