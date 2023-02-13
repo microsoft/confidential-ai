@@ -1,0 +1,23 @@
+{
+  "key":{
+      "kid": "",
+      "authority": {
+          "endpoint": "sharedneu.neu.attest.azure.net"
+      },
+      "mhsm": {
+          "endpoint": "",
+          "api_version": "api-version=7.3-preview",
+          "bearer_token": ""
+      }
+  },
+  "claims": [
+    [{
+      "claim": "x-ms-sevsnpvm-hostdata",
+      "equals": ""
+    },
+    {
+      "claim": "x-ms-sevsnpvm-launchmeasurement",
+      "equals": "ede826880a4e1a41898a96810efb09f2070513abb355e89652564cd18f1d43a7a031d1ff54490dbd61687de101b66ed1"
+    }]
+  ]
+}

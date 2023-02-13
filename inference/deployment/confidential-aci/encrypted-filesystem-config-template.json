@@ -1,0 +1,27 @@
+{
+  "azure_filesystems": [
+    {
+      "azure_url": "",
+      "azure_url_private": false,
+      "mount_point": "",
+      "key":{
+        "kid": "",
+        "authority": {
+            "endpoint": "sharedneu.neu.attest.azure.net"
+        },
+        "mhsm": {
+            "endpoint": "",
+            "api_version": "api-version=7.3-preview",
+            "bearer_token": ""
+        }
+      }      
+    }
+  ],
+  "azure_info": {
+    "certcache": {
+       "endpoint": "americas.acccache.azure.net",
+       "tee_type": "SevSnpVM",
+       "api_version": "api-version=2020-10-15-preview"
+    }      
+  }  
+}

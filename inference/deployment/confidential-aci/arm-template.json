@@ -1,0 +1,166 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "defaultValue": "confidential-inference",
+      "type": "string",
+      "metadata": {
+        "description": "Name for the container group"
+      }
+    },
+    "location": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "port": {
+      "defaultValue": 8080,
+      "type": "int",
+      "metadata": {
+        "description": "Port to open on the container and the public IP address."
+      }
+    },
+    "containerRegistry": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },
+    "containerRegistryUsername": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },
+    "containerRegistryPassword": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },    
+    "restartPolicy": {
+      "defaultValue": "Never",
+      "allowedValues": [
+        "Always",
+        "Never",
+        "OnFailure"
+      ],
+      "type": "string",
+      "metadata": {
+        "description": "The behavior of Azure runtime if container has stopped."
+      }
+    },
+    "ccePolicy": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "cce policy"
+      }
+    },
+    "modelSigningKey": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "modelSigningKey"
+      }
+    },
+    "EncfsSideCarArgs": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "Remote file system information for storage sidecar."
+      }
+    }
+  },
+  "variables": {
+    "imageRegistryCredentials": [
+      {
+        "server": "[parameters('containerRegistry')]",
+        "username": "[parameters('containerRegistryUsername')]",
+        "password": "[parameters('containerRegistryPassword')]"
+      }
+    ]
+  },  
+  "resources": [
+    {
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2022-04-01-preview",
+      "name": "[parameters('name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "confidentialComputeProperties": {
+          "isolationType": "SevSnp",
+          "ccePolicy": "[parameters('ccePolicy')]"
+        },
+        "containers": [
+          {
+            "name": "inference-server",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-server:latest')]",
+              "command": [
+                "/bin/bash",
+                "/opt/verify/verify_and_run.sh",
+                "[parameters('modelSigningKey')]",
+                "/mnt/remote/models"
+              ],
+              "volumeMounts": [
+                {
+                  "name": "remotemounts",
+                  "mountPath": "/mnt/remote"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 3,
+                  "memoryInGB": 12
+                }
+              }
+            }
+          },
+          {
+            "name": "encrypted-storage-sidecar",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/encfs:latest')]",
+              "command": [
+                "/encfs.sh"
+              ],
+              "environmentVariables": [
+                {
+                  "name": "EncfsSideCarArgs",
+                  "value": "[parameters('EncfsSideCarArgs')]"
+                }
+              ],
+              "volumeMounts": [
+                {
+                  "name": "remotemounts",
+                  "mountPath": "/mnt/remote"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 1,
+                  "memoryInGB": 4
+                }
+              }
+            }
+          }
+        ],
+        "osType": "Linux",
+        "restartPolicy": "[parameters('restartPolicy')]",
+        "volumes": [
+          {
+            "name": "remotemounts",
+            "emptydir": {}
+          }
+        ],
+        "imageRegistryCredentials": "[if(equals(parameters('containerRegistryUsername'),''), json('null'), variables('imageRegistryCredentials'))]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+[submodule "inference/external/confidential-sidecar-containers"]
+	path = inference/external/confidential-sidecar-containers
+	url = https://github.com/microsoft/confidential-sidecar-containers

@@ -1,0 +1,20 @@
+{
+  "containerRegistry": {
+    "value": ""
+  },
+  "containerRegistryUsername": {
+    "value": ""
+  },
+  "containerRegistryPassword": {
+    "value": ""
+  },
+  "ccePolicy": {
+    "value": ""
+  },
+  "modelSigningKey": {
+    "value": ""
+  },
+  "EncfsSideCarArgs": {
+    "value": ""
+  }
+}

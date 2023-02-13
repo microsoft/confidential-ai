@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "containers": [
+    {
+      "containerImage": "$CONTAINER_REGISTRY/inference-server:latest",
+      "command": [
+        "/bin/bash",
+        "/opt/verify/verify_and_run.sh",
+        "$MODEL_SIGNING_KEY",
+        "/mnt/remote/models"
+      ],
+      "environmentVariables": [],
+      "mounts": [
+        {
+          "mountType": "emptyDir",
+          "mountPath": "/mnt/remote",
+          "readonly": false
+        }
+      ]
+    },
+    {
+      "containerImage": "$CONTAINER_REGISTRY/encfs:latest",
+      "environmentVariables": [
+        {
+          "name" : "EncfsSideCarArgs",
+          "value" : ".+",
+          "strategy" : "re2"
+        }
+      ],
+      "command": [
+        "/encfs.sh"
+      ],
+      "mounts": [
+        {
+          "mountType": "emptyDir",
+          "mountPath": "/mnt/remote",
+          "readonly": false
+        }
+      ]
+    }
+  ]
+}
