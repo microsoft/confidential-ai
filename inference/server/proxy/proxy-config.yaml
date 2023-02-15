@@ -33,8 +33,6 @@ static_resources:
             validation_context:
               attestation_service_trusted_keys:
                   filename: attestation-service-key.pem
-              client_attestation_required:
-                  true
           downstream_tls_context:
             require_client_certificate: true
             common_tls_context:

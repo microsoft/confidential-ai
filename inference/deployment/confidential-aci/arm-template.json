@@ -98,6 +98,18 @@
           "isolationType": "SevSnp",
           "ccePolicy": "[parameters('ccePolicy')]"
         },
+        "initContainers": [
+          {
+            "name": "inference-init",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-init:latest')]",
+              "command": [
+                "/bin/sh",
+                "setup-iptables.sh"
+              ]
+            }
+          }
+        ],
         "containers": [
           {
             "name": "inference-server",
@@ -144,8 +156,61 @@
               ],
               "resources": {
                 "requests": {
-                  "cpu": 1,
-                  "memoryInGB": 4
+                  "cpu": 0.4,
+                  "memoryInGB": 2
+                }
+              }
+            }
+          },
+          {
+            "name": "skr-sidecar",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/skr:latest')]",
+              "command" : [
+                "/bin/sh",
+                "skr.sh",
+                "ewogICAiY2VydGNhY2hlIjogewogICAgICAiZW5kcG9pbnQiOiAiYW1lcmljYXMudGVzdC5hY2NjYWNoZS5henVyZS5uZXQiLAogICAgICAidGVlX3R5cGUiOiAiU2V2U25wVk0iLAogICAgICAiYXBpX3ZlcnNpb24iOiAiYXBpLXZlcnNpb249MjAyMC0xMC0xNS1wcmV2aWV3IgogICB9Cn0=",
+                "8284"
+              ],
+              "environmentVariables": [],
+              "ports": [
+                {
+                  "port": 8284,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 0.2,
+                  "memoryInGB": 0.5
+                }
+              }
+            }
+          },
+          {
+            "name": "inference-proxy",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-proxy:latest')]",
+              "command": [
+                "/bin/sh",
+                "bootstrap.sh"
+              ],
+              "environmentVariables": [
+                {
+                  "name": "MAA_ENDPOINT",
+                  "value": "sharedneu.neu.attest.azure.net"
+                }
+              ],
+              "ports": [
+                {
+                  "port": 15001,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 0.4,
+                  "memoryInGB": 1.5
                 }
               }
             }
