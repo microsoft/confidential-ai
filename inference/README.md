@@ -8,9 +8,14 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 - Ubuntu 20.04 (not tested on 22.04)
 - Azure CLI
 - go 
+- jq
 
 ## Setup
-Edit environment variables in env.sh. The AZURE_MSHM_ENDPOINT must point to an AKV mHSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned. 
+Edit environment variables in env.sh. The AZURE_MSHM_ENDPOINT must point to an AKV mHSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned. Activate the env.sh so that the environment variables are made available.
+
+```
+source env.sh
+```
 
 Next, login into your azure subscrption. 
 ```
@@ -30,7 +35,7 @@ cd ci
 
 Push containers to container registry
 ```
-az acr login $CONTAINER_REGISTRY
+az acr login --name $CONTAINER_REGISTRY
 ./push_containers.sh
 ```
 
@@ -64,7 +69,7 @@ Upload encrypted models to storage container.
 ## Service Deployment
 
 ```
-cd ../deployment
+cd ../deployment/confidential-aci
 ./deploy.sh
 ```
 ## Client Setup
