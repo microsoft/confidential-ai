@@ -1,4 +1,5 @@
 # ONNX densenet
+mkdir -p model_repository/densenet_onnx
 wget -O model_repository/densenet_onnx/config.pbtxt \
      https://raw.githubusercontent.com/triton-inference-server/server/main/docs/examples/model_repository/densenet_onnx/config.pbtxt
 
