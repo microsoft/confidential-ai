@@ -76,6 +76,13 @@
       "metadata": {
         "description": "Remote file system information for storage sidecar."
       }
+    },
+    "dnsNameLabel": {
+      "defaultValue": "secureSring",
+      "type": "string",
+      "metadata": {
+        "description": "DNS name of this service"
+      }
     }
   },
   "variables": {
@@ -218,6 +225,16 @@
         ],
         "osType": "Linux",
         "restartPolicy": "[parameters('restartPolicy')]",
+        "ipAddress": {
+          "type": "Public",
+          "ports": [
+            {
+              "port": "[parameters('port')]",
+              "protocol": "TCP"
+            }
+          ],
+          "dnsNameLabel": "[parameters('dnsNameLabel')]"
+        },
         "volumes": [
           {
             "name": "remotemounts",
