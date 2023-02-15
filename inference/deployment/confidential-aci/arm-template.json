@@ -16,13 +16,6 @@
         "description": "Location for all resources."
       }
     },
-    "port": {
-      "defaultValue": 8080,
-      "type": "int",
-      "metadata": {
-        "description": "Port to open on the container and the public IP address."
-      }
-    },
     "containerRegistry": {
       "defaultValue": "secureString",
       "type": "string",
@@ -128,6 +121,16 @@
                 "[parameters('modelSigningKey')]",
                 "/mnt/remote/models"
               ],
+              "ports": [
+                {
+                  "port": 8000,
+                  "protocol": "TCP"
+                },
+                {
+                  "port": 8001,
+                  "protocol": "TCP"
+                }
+              ],
               "volumeMounts": [
                 {
                   "name": "remotemounts",
@@ -229,7 +232,11 @@
           "type": "Public",
           "ports": [
             {
-              "port": "[parameters('port')]",
+              "port": 8000,
+              "protocol": "TCP"
+            },
+            {
+              "port": 8001,
               "protocol": "TCP"
             }
           ],
