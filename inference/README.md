@@ -78,9 +78,9 @@ cd ../deployment/confidential-aci
 ./deploy.sh
 ```
 ## Client Setup
-On the client, we will use the Triton client library and examples. To ensure that we attest the server before sending inference requests, we will use an HTTP proxy based on Envoy that supports attested TLS. 
+On the client, we will use the Triton client library  and sample applications to demonstrate how to setup secure and attested communication between a confidential container group and a client application. For attesting the server, we will use an enlightened client-side HTTP proxy based on Envoy, which supports an attested TLS protocol. 
 
-First build the proxy using the following script. 
+First build the envory proxy using the following script. 
 
 ```
 cd ../ci
