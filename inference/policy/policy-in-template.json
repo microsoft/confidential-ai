@@ -19,7 +19,7 @@
       ]
     },
     {
-      "containerImage": "$CONTAINER_REGISTRY/encfs:latest",
+      "containerImage": "$CONTAINER_REGISTRY/inference-encfs:latest",
       "environmentVariables": [
         {
           "name" : "EncfsSideCarArgs",

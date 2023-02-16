@@ -1,4 +1,9 @@
-#/bin/bash
+while getopts ":v:" options; do
+    case $options in 
+        v)vaultType=$OPTARG;;
+    esac
+done
+
 export MODEL_SIGNING_KEY=`cat ../../models/signing_public.pem | base64 -w0`
 
 echo Computing CCE policy...
@@ -6,7 +11,7 @@ envsubst < ../../policy/policy-in-template.json > /tmp/policy-in.json
 export CCE_POLICY=$(az confcom acipolicygen -i /tmp/policy-in.json)
 
 echo Generating encrypted file system information...
-export ENCRYPTED_FILESYSTEM_INFORMATION=`./generate-encrypted-filesystem-info.sh | base64 --wrap=0`
+export ENCRYPTED_FILESYSTEM_INFORMATION=`./generate-encrypted-filesystem-info.sh -v $vaultType| base64 --wrap=0`
 
 echo Generating parameters for ACI deployment...
 TMP=$(jq '.containerRegistry.value = env.CONTAINER_REGISTRY' aci-parameters-template.json)

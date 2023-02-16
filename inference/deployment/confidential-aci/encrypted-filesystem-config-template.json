@@ -6,22 +6,21 @@
       "mount_point": "",
       "key":{
         "kid": "",
+        "kty": "",
         "authority": {
-            "endpoint": "sharedneu.neu.attest.azure.net"
+            "endpoint": "sharedeus2.eus2.test.attest.azure.net"
         },
-        "mhsm": {
+        "akv": {
             "endpoint": "",
-            "api_version": "api-version=7.3-preview",
+            "api_version": "api-version=7.3",
             "bearer_token": ""
         }
-      }      
+      },
+      "key_derivation":
+      {
+        "salt": "",
+        "label": ""
+      }
     }
-  ],
-  "azure_info": {
-    "certcache": {
-       "endpoint": "americas.acccache.azure.net",
-       "tee_type": "SevSnpVM",
-       "api_version": "api-version=2020-10-15-preview"
-    }      
-  }  
+  ] 
 }
