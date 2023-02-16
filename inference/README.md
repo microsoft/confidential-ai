@@ -11,8 +11,9 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 - jq
 
 ## Setup
-Edit environment variables in env.sh. The AZURE_MSHM_ENDPOINT must point to an AKV mHSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned. Activate the env.sh so that the environment variables are made available.
+Edit environment variables in env.sh. The `AZURE_AKV_RESOURCE_ENDPOINT` must point to either (a) a managed HSM instance where you have `Managed HSM Crypto User` and `Managed HSM Crypto Officer` roles assigned or (b) a key vault instance where you have `Key Vault Crypto User` and `Key Vault Crypto Officer roles` assigned.
 
+Activate the env.sh so that the environment variables are made available.
 ```
 source env.sh
 ```
@@ -26,6 +27,7 @@ Install the latest version of confidential computing extension for Azure CLI.
 ```
 az extension add --source https://acccliazext.blob.core.windows.net/confcom/confcom-0.2.9-py3-none-any.whl -y
 ```
+
 ## Build inferencing service
 Build server-side containers 
 ```
@@ -45,13 +47,21 @@ Place the models you would like to serve under the ```models/model_repository```
 cd ../models
 ./fetch_models.sh
 ```
-
-### Sign and Encrypt Models
-Use the following script to sign and encrypt models using fresh keys. 
+### Sign Models
+Use the following script to sign models using fresh signing keys. 
 ```
-./sign_and_encrypt_models.sh
+./sign_models.sh
 ```
-
+### Generate and Provision encryption keys to Azure Key Vault
+Use the following script to sample a fresh encryption key. The encryption key will be stored under `modelkey.bin`. In the process, this script generates the policy which encodes the public signing key (from the previous step) as a command attribute for the inference server container. The user can specify the type of key that will be imported. For AKV key vaults, the only supported type is `RSA-HSM`. Because the models are encrypted using octet/symmetric keys, if the imported key is an `RSA-HSM` key, the tool derives an octet/symmetric key using the RSA private exponent `D`, a salt and a label. The user may pass the salt as a command attribute to the script.
+```
+./import_key.sh [-t <oct | oct-HSM | RSA | RSA-HSM>] [-s <salt_for_key_derivation_in_hexstring>]
+```
+### Encrypt Models
+Use the following script to encrypt models using the `modelkey.bin` output from previous stage.
+```
+./encrypt_models.sh
+```
 ### Upload models
 Create a resource group, storage account and blob storage containers to store your encrypted models.
 ```
@@ -62,12 +72,7 @@ Upload encrypted models to storage container.
 ./upload_encrypted_models.sh
 ```
 
-### Provision keys to Azure Key Vault
-```
-./import_key.sh
-```
 ## Service Deployment
-
 ```
 cd ../deployment/confidential-aci
 ./deploy.sh

@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 export MODEL_SIGNING_KEY=`cat ../../models/signing_public.pem | base64 -w0`
 
 echo Computing CCE policy...

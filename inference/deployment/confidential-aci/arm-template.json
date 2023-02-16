@@ -118,7 +118,7 @@
               "resources": {
                 "requests": {
                   "cpu": 3,
-                  "memoryInGB": 12
+                  "memoryInGB": 3
                 }
               }
             }
@@ -126,9 +126,9 @@
           {
             "name": "encrypted-storage-sidecar",
             "properties": {
-              "image": "[concat(parameters('containerRegistry'), '/encfs:latest')]",
+              "image": "[concat(parameters('containerRegistry'), '/inference-encfs:latest')]",
               "command": [
-                "/encfs.sh"
+                "/encfs.sh"                
               ],
               "environmentVariables": [
                 {
@@ -145,7 +145,7 @@
               "resources": {
                 "requests": {
                   "cpu": 1,
-                  "memoryInGB": 4
+                  "memoryInGB": 1
                 }
               }
             }
