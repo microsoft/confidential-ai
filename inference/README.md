@@ -11,6 +11,11 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 - jq
 
 ## Setup
+Clone this repository, including sub-modules. 
+```
+git clone --recursive https://github.com/microsoft/confidential-ai
+```
+
 Edit environment variables in env.sh. The AZURE_MSHM_ENDPOINT must point to an AKV mHSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned. Activate the env.sh so that the environment variables are made available.
 
 ```
