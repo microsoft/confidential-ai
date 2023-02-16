@@ -4,6 +4,7 @@ MODEL_SAS_TOKEN=$(az storage blob generate-sas --account-name $AZURE_STORAGE_ACC
 export MODEL_SAS_TOKEN="$(echo -n $MODEL_SAS_TOKEN | tr -d \")"
 export MODEL_SAS_TOKEN="?$MODEL_SAS_TOKEN"
 
+# Retrieve the token based on the sub-domain in the AKV resource endpoint
 if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
   AKV_TOKEN=$(az account get-access-token --resource https://vault.azure.net)
   export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)    
@@ -12,7 +13,9 @@ elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
   export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)  
 fi
 
+# Retrieve the key type
 export AZURE_AKV_KEY_TYPE=$(cat /tmp/importkey-config.json | jq '.key.kty' | sed 's/\"//g')
+# Retrieve the salt and label. Needed for RSA-HSM keys
 export AZURE_AKV_KEY_DERIVATION_SALT=$(cat /tmp/importkey-config.json | jq '.key_derivation.salt' | sed 's/\"//g')
 export AZURE_AKV_KEY_DERIVATION_LABEL=$(cat /tmp/importkey-config.json | jq '.key_derivation.label' | sed 's/\"//g')
 
