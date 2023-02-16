@@ -78,5 +78,42 @@ cd ../deployment/confidential-aci
 ./deploy.sh
 ```
 ## Client Setup
+On the client, we will use the Triton client library and examples. To ensure that we attest the server before sending inference requests, we will use an HTTP proxy based on Envoy that supports attested TLS. 
 
-## Run Inferencing Requests
+First build the proxy using the following script. 
+
+```
+cd ../ci
+./built_client.sh
+```
+
+This will build a container image called ```inference-client-proxy```. Deploy this container where it is reachable from all your clients. For example, you can use docker to deploy the proxy locally. 
+
+```
+docker run -it --privileged --network host --env MAA_ENDPOINT=sharedneu.neu.attest.azure.net inference-client-proxy /bin/bash -c ./bootstrap.sh
+```
+The proxy will listen for incoming requests on port 15001.
+
+## Run Inference Requests
+Run the triton client container image. 
+
+```
+docker run -it --network host nvcr.io/nvidia/tritonserver:22.05-py3-sdk
+```
+From the container, send an inference request using one of the sample applications as follows.
+
+```
+cd install/bin
+http_proxy=http://127.0.0.1:15001 ./image_client -m densenet_onnx -c 3 -s INCEPTION ../../images/mug.jpg -u http://conf-inference.westeurope.azurecontainer.io:8000
+
+```
+Setting the ```http_proxy``` environment variable redirects all HTTP traffic via the proxy, which establishes an attested TLS connection with the server. All subsequent requests and responses are encrypted with keys negotiatiated after the server has proven that it is running in a confidential container instance with a complaint UVM kernel and expected container security policy. 
+
+If all goes well, you should receive an inference response as follows.
+```
+Request 0, batch size 1
+Image '../../images/mug.jpg':
+    15.349563 (504) = COFFEE MUG
+    13.227461 (968) = CUP
+    10.424893 (505) = COFFEEPOT
+```
