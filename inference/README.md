@@ -51,9 +51,9 @@ Use the following script to sign models using fresh signing keys.
 ./sign_models.sh
 ```
 ### Generate and Provision encryption keys to Azure Key Vault
-Use the following script to sample a fresh encryption key. The encryption key will be stored under `modelkey.bin`. In the process, this script generates the policy which encodes the public signing key (from the previous step) as a command attribute for the inference server container. The default AKV resource type is managed HSM. For AKV key vault resource type, the user needs to specify a `vault` resource type using the `-v` flag.
+Use the following script to sample a fresh encryption key. The encryption key will be stored under `modelkey.bin`. In the process, this script generates the policy which encodes the public signing key (from the previous step) as a command attribute for the inference server container. The user can specify the type of key that will be imported. For AKV key vaults, the only supported type is `RSA-HSM`. Because the models are encrypted using octet/symmetric keys, if the imported key is an RSA-HSM key, the tool derives an octet/symmetric key using the RSA private exponent, a salt and a label. The user may pass the salt as a command attribute to the script.
 ```
-./import_key.sh [-v vault] [-s <salt_for_key_derivaiton_in_hexstring>]
+./import_key.sh [-t <oct | oct-HSM | RSA | RSA-HSM] [-s <salt_for_key_derivation_in_hexstring>]
 ```
 ### Encrypt Models
 Use the following script to encrypt models using the `modelkey.bin` output from previous stage.
@@ -71,10 +71,9 @@ Upload encrypted models to storage container.
 ```
 
 ## Service Deployment
-Deploy the service. The default AKV resource type is managed HSM. For AKV key vault resource type, the user needs to specify a `vault` resource type using the `-v` flag.
 ```
 cd ../deployment/confidential-aci
-./deploy.sh [-v vault]
+./deploy.sh
 ```
 ## Client Setup
 

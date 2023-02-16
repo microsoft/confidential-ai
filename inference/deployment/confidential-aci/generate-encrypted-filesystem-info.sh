@@ -1,27 +1,20 @@
 #!/bin/bash
-while getopts ":v:" options; do
-    case $options in 
-        v)vaultType=$OPTARG;;
-    esac
-done
-
 end=`date -u -d "600 minutes" '+%Y-%m-%dT%H:%MZ'`
 MODEL_SAS_TOKEN=$(az storage blob generate-sas --account-name $AZURE_STORAGE_ACCOUNT_NAME --container-name $AZURE_STORAGE_CONTAINER_NAME --permissions r --name model.img --expiry $end --only-show-errors) 
 export MODEL_SAS_TOKEN="$(echo -n $MODEL_SAS_TOKEN | tr -d \")"
 export MODEL_SAS_TOKEN="?$MODEL_SAS_TOKEN"
 
-if [[ "$vaultType" = "vault" ]]; then
+if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
   AKV_TOKEN=$(az account get-access-token --resource https://vault.azure.net)
-  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)  
-  export AZURE_AKV_RESOURCE_ENDPOINT=$AZURE_AKV_ENDPOINT
-  export AZURE_AKV_KEY_TYPE=$(cat /tmp/importkey-config-akv.json | jq '.key.kty' | sed 's/\"//g')
-  export AZURE_AKV_KEY_DERIVATION_SALT=$(cat /tmp/importkey-config.json | jq '.key_derivation.salt' | sed 's/\"//g')
-  export AZURE_AKV_KEY_DERIVATION_LABEL=$(cat /tmp/importkey-config.json | jq '.key_derivation.label' | sed 's/\"//g')
-else 
+  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)    
+elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
   AKV_TOKEN=$(az account get-access-token --resource https://managedhsm.azure.net)
-  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)
-  export AZURE_AKV_RESOURCE_ENDPOINT=$AZURE_MHSM_ENDPOINT
+  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)  
 fi
+
+export AZURE_AKV_KEY_TYPE=$(cat /tmp/importkey-config.json | jq '.key.kty' | sed 's/\"//g')
+export AZURE_AKV_KEY_DERIVATION_SALT=$(cat /tmp/importkey-config.json | jq '.key_derivation.salt' | sed 's/\"//g')
+export AZURE_AKV_KEY_DERIVATION_LABEL=$(cat /tmp/importkey-config.json | jq '.key_derivation.label' | sed 's/\"//g')
 
 TMP=$(jq . encrypted-filesystem-config-template.json)
 
