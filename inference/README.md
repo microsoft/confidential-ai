@@ -11,8 +11,9 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 - jq
 
 ## Setup
-Edit environment variables in env.sh. The AZURE_MSHM_ENDPOINT must point to an AKV mHSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned. Activate the env.sh so that the environment variables are made available.
+Edit environment variables in env.sh. The AZURE_AKV_RESOURCE_ENDPOINT must point to either (a) a managed HSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned or (b) a key vault instance where you have Key Vault Crypto User and Key Vault Crypto Officer roles assigned.
 
+Activate the env.sh so that the environment variables are made available.
 ```
 source env.sh
 ```
@@ -26,6 +27,7 @@ Install the latest version of confidential computing extension for Azure CLI.
 ```
 az extension add --source https://acccliazext.blob.core.windows.net/confcom/confcom-0.2.9-py3-none-any.whl -y
 ```
+
 ## Build inferencing service
 Build server-side containers 
 ```
