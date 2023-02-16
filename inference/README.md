@@ -11,7 +11,7 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 - jq
 
 ## Setup
-Edit environment variables in env.sh. The AZURE_AKV_RESOURCE_ENDPOINT must point to either (a) a managed HSM instance where you have HSM Crypto User and Managed HSM Crypto Officer roles assigned or (b) a key vault instance where you have Key Vault Crypto User and Key Vault Crypto Officer roles assigned.
+Edit environment variables in env.sh. The `AZURE_AKV_RESOURCE_ENDPOINT` must point to either (a) a managed HSM instance where you have `Managed HSM Crypto User` and `Managed HSM Crypto Officer` roles assigned or (b) a key vault instance where you have `Key Vault Crypto User` and `Key Vault Crypto Officer roles` assigned.
 
 Activate the env.sh so that the environment variables are made available.
 ```
