@@ -27,7 +27,7 @@ elif [ "$kty" = *"oct" ]; then
     export AZURE_AKV_KEY_TYPE="oct-HSM"
 fi
 
-# Generate key import configuration. Default AKV resource type is managed hsm
+# Obtain the token based on the AKV resource endpoint subdomain
 if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
     export BEARER_TOKEN=$(az account get-access-token --resource https://vault.azure.net | jq -r .accessToken)
     echo "Importing keys to AKV key vaults can be only of type RSA-HSM"
@@ -48,6 +48,7 @@ if [ "$AZURE_AKV_KEY_TYPE" = "RSA-HSM" ]; then
     export AZURE_AKV_KEY_DERIVATION_LABEL="Model Encryption Key"
 fi
 
+# Generate key import configuration.
 CONFIG=$(jq '.claims[0][0].equals = env.CCE_POLICY_HASH' importkey-config-template.json)
 CONFIG=$(echo $CONFIG | jq '.key.kid = "ModelFilesystemEncryptionKey"')
 CONFIG=$(echo $CONFIG | jq '.key.kty = env.AZURE_AKV_KEY_TYPE')
