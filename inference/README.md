@@ -4,11 +4,12 @@ This sample demonstrates Confidential Inferencing using Confidential Containers 
 
 ## Prerequisites
 - Azure subscription
-- Azure Key Vault mHSM instance
+- Azure Key Vault instance or Key Vault mHSM instance (for enhanced security)
 - Ubuntu 20.04 (not tested on 22.04)
 - Azure CLI
 - go 
 - jq
+- Python 3.6.9 and pip
 
 ## Setup
 Clone this repository, including sub-modules. 
@@ -28,9 +29,15 @@ Next, login into your azure subscrption.
 az login
 az account set --subscription <YOUR_SUBSCRPTION_NAME>
 ```
-Install the latest version of confidential computing extension for Azure CLI. 
+
+Remove previously deployed version confidential computing extension for Azure CLI. 
 ```
-az extension add --source https://acccliazext.blob.core.windows.net/confcom/confcom-0.2.9-py3-none-any.whl -y
+az extension remove --name confcom
+```
+
+Install the latest version of confidential computing extension. 
+```
+az extension add --source https://acccliazext.blob.core.windows.net/confcom/confcom-0.2.10-py3-none-any.whl -y
 ```
 
 ## Build inferencing service
@@ -62,6 +69,7 @@ Use the following script to sample a fresh encryption key. The encryption key wi
 ```
 ./import_key.sh [-t <oct | oct-HSM | RSA | RSA-HSM>] [-s <salt_for_key_derivation_in_hexstring>]
 ```
+
 ### Encrypt Models
 Use the following script to encrypt models using the `modelkey.bin` output from previous stage.
 ```

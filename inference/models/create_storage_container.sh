@@ -1,5 +1,5 @@
 az group create \
-    --location westeurope \
+    --location $AZURE_RESOURCE_GROUP_LOCATION \
     --name $AZURE_RESOURCE_GROUP
 
 az storage account create \
