@@ -1,6 +1,11 @@
 containers=("inference-server:latest" "inference-proxy:latest" "inference-init:latest" "encfs:latest" "skr:latest")
 for container in "${containers[@]}"
 do
-  docker tag $container $CONTAINER_REGISTRY"/"$container
-  docker push $CONTAINER_REGISTRY"/"$container
+  container_tag=$container
+  if [[ "$container" = "encfs:latest" ]]; then
+    container_tag="inference-encfs:latest"
+  fi
+  
+  docker tag $container $CONTAINER_REGISTRY"/"$container_tag
+  docker push $CONTAINER_REGISTRY"/"$container_tag
 done

@@ -6,6 +6,3 @@ openssl ec -in signing_private.pem -pubout -out signing_public.pem
 
 # Sign models
 python3 sign.py signing_private.pem model_repository
-
-# Generate encrypted file system image
-./generatefs.sh -d model_repository -k modelkey.bin -i model.img

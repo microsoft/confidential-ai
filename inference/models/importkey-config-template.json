@@ -1,23 +1,29 @@
 {
   "key":{
       "kid": "",
+      "kty": "",
       "authority": {
-          "endpoint": "sharedneu.neu.attest.azure.net"
+          "endpoint": "sharedeus2.eus2.test.attest.azure.net"
       },
-      "mhsm": {
+      "akv": {
           "endpoint": "",
-          "api_version": "api-version=7.3-preview",
+          "api_version": "api-version=7.3",
           "bearer_token": ""
       }
   },
+  "key_derivation":
+  {
+    "salt": "",
+    "label": ""
+  },  
   "claims": [
     [{
       "claim": "x-ms-sevsnpvm-hostdata",
       "equals": ""
     },
     {
-      "claim": "x-ms-sevsnpvm-launchmeasurement",
-      "equals": "ede826880a4e1a41898a96810efb09f2070513abb355e89652564cd18f1d43a7a031d1ff54490dbd61687de101b66ed1"
+      "claim": "x-ms-compliance-status",
+      "equals": "azure-compliant-uvm"
     }]
   ]
 }
