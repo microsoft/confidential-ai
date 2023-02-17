@@ -4,6 +4,8 @@ do
   container_tag=$container
   if [[ "$container" = "encfs:latest" ]]; then
     container_tag="inference-encfs:latest"
+  elif [[ "$container" = "skr:latest" ]]; then
+    container_tag="inference-skr:latest"
   fi
   
   docker tag $container $CONTAINER_REGISTRY"/"$container_tag

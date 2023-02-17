@@ -47,11 +47,11 @@
       ]
     },
     {
-      "containerImage": "$CONTAINER_REGISTRY/skr:latest",
+      "containerImage": "$CONTAINER_REGISTRY/inference-skr:latest",
       "command": [
         "/bin/sh",
         "skr.sh",
-        "ewogICAiY2VydGNhY2hlIjogewogICAgICAiZW5kcG9pbnQiOiAiYW1lcmljYXMudGVzdC5hY2NjYWNoZS5henVyZS5uZXQiLAogICAgICAidGVlX3R5cGUiOiAiU2V2U25wVk0iLAogICAgICAiYXBpX3ZlcnNpb24iOiAiYXBpLXZlcnNpb249MjAyMC0xMC0xNS1wcmV2aWV3IgogICB9Cn0=",
+        "ewp9",
         "8284"
       ],
       "environmentVariables": []
@@ -65,7 +65,7 @@
       "environmentVariables": [
         {
           "name": "MAA_ENDPOINT",
-          "value": "sharedneu.neu.attest.azure.net",
+          "value": "sharedeus2.eus2.test.attest.azure.net",
           "strategy": "string"
         }
       ]

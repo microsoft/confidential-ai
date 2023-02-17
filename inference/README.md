@@ -89,17 +89,23 @@ First build the envory proxy using the following script.
 
 ```
 cd ../ci
-./built_client.sh
+./build_client.sh
 ```
 
 This will build a container image called ```inference-client-proxy```. Deploy this container where it is reachable from all your clients. For example, you can use docker to deploy the proxy locally. 
 
 ```
-docker run -it --privileged --network host --env MAA_ENDPOINT=sharedneu.neu.attest.azure.net inference-client-proxy /bin/bash -c ./bootstrap.sh
+docker run -it --privileged --network host --env MAA_ENDPOINT=sharedeus2.eus2.test.attest.azure.net inference-client-proxy /bin/bash -c ./bootstrap.sh
 ```
 The proxy will listen for incoming requests on port 15001.
 
 ## Run Inference Requests
+Pull the triton client container image.
+
+```
+docker pull nvcr.io/nvidia/tritonserver:22.05-py3-sdk
+```
+
 Run the triton client container image. 
 
 ```
