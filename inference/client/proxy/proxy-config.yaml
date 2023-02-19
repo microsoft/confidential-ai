@@ -72,12 +72,17 @@ static_resources:
               use_tcp_for_dns_lookups: true
               no_default_search_domain: true
     transport_socket:
-      name: envoy.transport_sockets.tls
+      name: envoy.transport_sockets.att_tls
       typed_config:
-        "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
-        common_tls_context:
-          tls_params:
-            tls_minimum_protocol_version: TLSv1_3
-            tls_maximum_protocol_version: TLSv1_3
+        "@type": type.googleapis.com/envoy.extensions.transport_sockets.att_tls.v3.UpstreamAttTlsContext
+        attested_tls_context:
           validation_context:
-            trust_chain_verification: ACCEPT_UNTRUSTED
+            attestation_service_trusted_keys:
+                filename: attestation-service-key.pem
+        upstream_tls_context:
+          common_tls_context:
+            tls_params:
+              tls_minimum_protocol_version: TLSv1_3
+              tls_maximum_protocol_version: TLSv1_3
+            validation_context:
+              trust_chain_verification: ACCEPT_UNTRUSTED
