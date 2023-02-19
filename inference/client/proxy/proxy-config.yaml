@@ -40,14 +40,6 @@ static_resources:
               dns_cache_config:
                 name: dynamic_forward_proxy_cache_config
                 dns_lookup_family: V4_ONLY
-                dns_resolution_config:
-                  resolvers:
-                  - socket_address:
-                      address: "10.50.10.50"
-                      port_value: 53
-                  dns_resolver_options:
-                    use_tcp_for_dns_lookups: true
-                    no_default_search_domain: true
           - name: envoy.filters.http.router    
           access_log:
           - name: envoy.access_loggers.stdout
@@ -63,14 +55,6 @@ static_resources:
         dns_cache_config:
           name: dynamic_forward_proxy_cache_config
           dns_lookup_family: V4_ONLY
-          dns_resolution_config:
-            resolvers:
-            - socket_address:
-                address: "10.50.10.50"
-                port_value: 53
-            dns_resolver_options:
-              use_tcp_for_dns_lookups: true
-              no_default_search_domain: true
     transport_socket:
       name: envoy.transport_sockets.att_tls
       typed_config:
