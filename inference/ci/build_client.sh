@@ -1,0 +1,1 @@
+DOCKER_BUILDKIT=1 docker build ${PWD}/../client/proxy -t inference-client-proxy

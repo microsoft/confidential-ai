@@ -16,5 +16,8 @@
   },
   "EncfsSideCarArgs": {
     "value": ""
+  },
+  "dnsNameLabel": {
+    "value": ""
   }
 }
