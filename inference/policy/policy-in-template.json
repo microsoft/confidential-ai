@@ -2,6 +2,14 @@
   "version": "1.0",
   "containers": [
     {
+      "containerImage": "$CONTAINER_REGISTRY/inference-init:latest",
+      "environmentVariables": [],
+      "command": [
+        "/bin/sh",
+        "setup-iptables.sh"
+      ]
+    },
+    {
       "containerImage": "$CONTAINER_REGISTRY/inference-server:latest",
       "command": [
         "/bin/bash",
@@ -35,6 +43,30 @@
           "mountType": "emptyDir",
           "mountPath": "/mnt/remote",
           "readonly": false
+        }
+      ]
+    },
+    {
+      "containerImage": "$CONTAINER_REGISTRY/inference-skr:latest",
+      "command": [
+        "/bin/sh",
+        "skr.sh",
+        "ewp9",
+        "8284"
+      ],
+      "environmentVariables": []
+    },
+    {
+      "containerImage": "$CONTAINER_REGISTRY/inference-proxy:latest",
+      "command": [
+        "/bin/sh",
+        "bootstrap.sh"
+      ],
+      "environmentVariables": [
+        {
+          "name": "MAA_ENDPOINT",
+          "value": "sharedeus2.eus2.test.attest.azure.net",
+          "strategy": "string"
         }
       ]
     }

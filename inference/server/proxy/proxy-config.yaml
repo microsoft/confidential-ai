@@ -33,8 +33,6 @@ static_resources:
             validation_context:
               attestation_service_trusted_keys:
                   filename: attestation-service-key.pem
-              client_attestation_required:
-                  true
           downstream_tls_context:
             require_client_certificate: true
             common_tls_context:
@@ -69,13 +67,6 @@ static_resources:
           - name: envoy.access_loggers.stdout
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
-    - filter_chain_match:
-      filters:
-      - name: envoy.filters.network.tcp_proxy
-        typed_config:
-          "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
-          cluster: black-hole
-          stat_prefix: ingress_tcp
   clusters:
   - name: inbound-pass-through
     type: ORIGINAL_DST
@@ -84,6 +75,3 @@ static_resources:
       source_address:
         address: 127.0.0.6
         port_value: 0
-  - name: black-hole
-    type: STRICT_DNS
-    lb_policy: ROUND_ROBIN

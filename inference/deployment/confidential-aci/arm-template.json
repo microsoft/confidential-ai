@@ -16,13 +16,6 @@
         "description": "Location for all resources."
       }
     },
-    "port": {
-      "defaultValue": 8080,
-      "type": "int",
-      "metadata": {
-        "description": "Port to open on the container and the public IP address."
-      }
-    },
     "containerRegistry": {
       "defaultValue": "secureString",
       "type": "string",
@@ -76,6 +69,13 @@
       "metadata": {
         "description": "Remote file system information for storage sidecar."
       }
+    },
+    "dnsNameLabel": {
+      "defaultValue": "secureSring",
+      "type": "string",
+      "metadata": {
+        "description": "DNS name of this service"
+      }
     }
   },
   "variables": {
@@ -98,6 +98,18 @@
           "isolationType": "SevSnp",
           "ccePolicy": "[parameters('ccePolicy')]"
         },
+        "initContainers": [
+          {
+            "name": "inference-init",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-init:latest')]",
+              "command": [
+                "/bin/sh",
+                "setup-iptables.sh"
+              ]
+            }
+          }
+        ],
         "containers": [
           {
             "name": "inference-server",
@@ -108,6 +120,16 @@
                 "/opt/verify/verify_and_run.sh",
                 "[parameters('modelSigningKey')]",
                 "/mnt/remote/models"
+              ],
+              "ports": [
+                {
+                  "port": 8000,
+                  "protocol": "TCP"
+                },
+                {
+                  "port": 8001,
+                  "protocol": "TCP"
+                }
               ],
               "volumeMounts": [
                 {
@@ -144,8 +166,61 @@
               ],
               "resources": {
                 "requests": {
-                  "cpu": 1,
-                  "memoryInGB": 1
+                  "cpu": 0.4,
+                  "memoryInGB": 2
+                }
+              }
+            }
+          },
+          {
+            "name": "skr-sidecar",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-skr:latest')]",
+              "command" : [
+                "/bin/sh",
+                "skr.sh",
+                "ewp9",
+                "8284"
+              ],
+              "environmentVariables": [],
+              "ports": [
+                {
+                  "port": 8284,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 0.2,
+                  "memoryInGB": 0.5
+                }
+              }
+            }
+          },
+          {
+            "name": "inference-proxy",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-proxy:latest')]",
+              "command": [
+                "/bin/sh",
+                "bootstrap.sh"
+              ],
+              "environmentVariables": [
+                {
+                  "name": "MAA_ENDPOINT",
+                  "value": "sharedeus2.eus2.test.attest.azure.net"
+                }
+              ],
+              "ports": [
+                {
+                  "port": 15001,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 0.4,
+                  "memoryInGB": 1.5
                 }
               }
             }
@@ -153,6 +228,20 @@
         ],
         "osType": "Linux",
         "restartPolicy": "[parameters('restartPolicy')]",
+        "ipAddress": {
+          "type": "Public",
+          "ports": [
+            {
+              "port": 8000,
+              "protocol": "TCP"
+            },
+            {
+              "port": 8001,
+              "protocol": "TCP"
+            }
+          ],
+          "dnsNameLabel": "[parameters('dnsNameLabel')]"
+        },
         "volumes": [
           {
             "name": "remotemounts",
