@@ -30,6 +30,7 @@ Under this threat model, we wish to guarantee the following properties.
 
 ### Architecture
 
+#### **Overview**
 ![Confidential ML Inference Architecture](./images/conf-ml-architecture.png)
 
 The figure above illustrates the architecure of the proposed confidential ML inference service. 
