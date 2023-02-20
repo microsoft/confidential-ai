@@ -1,5 +1,5 @@
 # Confidential ML Inference Service Architecture
-We first describe the confidential ACI platform, and then the threat model and the architecture for the confidential ML inference service.
+We first describe the confidential containers on ACI platform, and then the threat model and the architecture for the confidential ML inference service.
 
 ## Confidential Containers on ACI
 ![Platform for Confidential ACI](./images/aci-platform.png)
