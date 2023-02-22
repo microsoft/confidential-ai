@@ -1,0 +1,13 @@
+version= 1.0;
+
+authorizationrules
+{
+[type=="x-ms-sevsnpvm-hostdata", value==""] 
+&& [type=="x-ms-compliance-status", value=="azure-compliant-uvm"]
+=> permit();
+};
+
+issuancerules
+{
+=> issue(type="CompliantMLInferenceService", value=true);
+};
