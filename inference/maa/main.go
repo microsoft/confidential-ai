@@ -27,11 +27,13 @@ func main() {
 	// variables declaration
 	var policyFile string
 	var keyRSAPEMFile string
+	var createX509Cert bool
 	var err error
 
 	// flags declaration using flag package
 	flag.StringVar(&policyFile, "p", "", "Specify path to policy")
 	flag.StringVar(&keyRSAPEMFile, "k", "", "Specify path to RSA key PEM file [optional]")
+	flag.BoolVar(&createX509Cert, "c", false, "Create x509 cert for signing key [optional]")
 	flag.Parse() // after declaring flags we need to call it
 
 	if flag.NArg() != 0 || len(policyFile) == 0 {
@@ -82,7 +84,23 @@ func main() {
 			return
 		}
 		privateRSAKeyFile.Close()
+	} else {
+		privateRSAKeyBytes, err := ioutil.ReadFile(keyRSAPEMFile)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
+		data, _ := pem.Decode(privateRSAKeyBytes)
+		key, err := x509.ParsePKCS8PrivateKey(data.Bytes)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		privateRSAKey = key.(*rsa.PrivateKey)
+	}
+
+	if createX509Cert {
 		// Generate a self-signed x509 certificate for the public RSA private key
 		cert := &x509.Certificate{
 			SerialNumber: big.NewInt(1658),
@@ -124,21 +142,6 @@ func main() {
 			return
 		}
 		publicRSAKeyCertFile.Close()
-
-	} else {
-		privateRSAKeyBytes, err := ioutil.ReadFile(keyRSAPEMFile)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		data, _ := pem.Decode(privateRSAKeyBytes)
-		key, err := x509.ParsePKCS8PrivateKey(data.Bytes)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		privateRSAKey = key.(*rsa.PrivateKey)
 	}
 
 	// Create payload for the attestation policy token
