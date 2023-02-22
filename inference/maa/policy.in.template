@@ -2,7 +2,7 @@ version= 1.0;
 
 authorizationrules
 {
-[type=="x-ms-sevsnpvm-hostdata", value==""] 
+[type=="x-ms-sevsnpvm-hostdata", value=="$CCE_POLICY_HASH"] 
 && [type=="x-ms-compliance-status", value=="azure-compliant-uvm"]
 => permit();
 };
