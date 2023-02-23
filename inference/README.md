@@ -54,6 +54,11 @@ az acr login --name $CONTAINER_REGISTRY
 ```
 
 ## Model Preparation
+Create a resource group.
+```
+./create_resource_group.sh
+```
+
 Place the models you would like to serve under the ```models/model_repository``` folder. You can use the following script to fetch samples models.
 ```
 cd ../models
@@ -65,6 +70,12 @@ Use the following script to sign models using fresh signing keys.
 ./sign_models.sh
 ```
 ### Generate and Provision encryption keys to Azure Key Vault
+Create an Azure Key vault vault using the following script. If you need to create a managed hsm then you need to create it manually.
+
+```
+./create_akv.sh
+```
+
 Use the following script to sample a fresh encryption key. The encryption key will be stored under `modelkey.bin`. In the process, this script generates the policy which encodes the public signing key (from the previous step) as a command attribute for the inference server container. The user can specify the type of key that will be imported. For AKV key vaults, the only supported type is `RSA-HSM`. Because the models are encrypted using octet/symmetric keys, if the imported key is an `RSA-HSM` key, the tool derives an octet/symmetric key using the RSA private exponent `D`, a salt and a label. The user may pass the salt as a command attribute to the script.
 ```
 ./import_key.sh [-t <oct | oct-HSM | RSA | RSA-HSM>] [-s <salt_for_key_derivation_in_hexstring>]
@@ -76,7 +87,7 @@ Use the following script to encrypt models using the `modelkey.bin` output from 
 ./encrypt_models.sh
 ```
 ### Upload models
-Create a resource group, storage account and blob storage containers to store your encrypted models.
+Create a storage account and blob storage containers to store your encrypted models.
 ```
 ./create_storage_container.sh
 ```

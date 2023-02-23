@@ -2,13 +2,13 @@
   "azure_filesystems": [
     {
       "azure_url": "",
-      "azure_url_private": false,
+      "azure_url_private": true,
       "mount_point": "",
       "key":{
         "kid": "",
         "kty": "",
         "authority": {
-            "endpoint": "sharedeus2.eus2.test.attest.azure.net"
+            "endpoint": ""
         },
         "akv": {
             "endpoint": "",
