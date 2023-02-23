@@ -3,7 +3,7 @@
       "kid": "",
       "kty": "",
       "authority": {
-          "endpoint": "sharedeus2.eus2.test.attest.azure.net"
+          "endpoint": ""
       },
       "akv": {
           "endpoint": "",
