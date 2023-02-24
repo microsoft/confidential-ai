@@ -1,6 +1,7 @@
 # Confidential Inference
 
-This sample demonstrates Confidential Inferencing using Confidential Containers on ACI. 
+This sample demonstrates Confidential Inferencing using Confidential Containers on ACI. The architecture and its threat model is presented [here.](docs/arch.md)
+
 
 ## Prerequisites
 - Azure subscription
