@@ -1,22 +1,21 @@
 # Confidential AI
 
 The growing adoption of AI has raised concerns regarding security and privacy of underlying datasets and models. 
-This repository contains samples demonstrating the use of Azure Confidential Computing for hosting AI workloads with strong security guarantees. 
+This repository contains samples demonstrating the use of Azure Confidential Computing for hosting AI workloads with hardware-based security guarantees. 
+The samples are provided on an As-Is basis. They are work-in-progress and should not be used in production. 
 
 ## Confidential Computing Platform
 These samples are based on several confidential computing platform components and services. 
 
 - Confidential Containers
 - Confidential GPUs
-- Microsoft Azure Attestation
+- Microsoft Azure Attestation (MAA)
 - Azure Key Vault mHSM 
 
 ## Workloads
 Samples include the following workloads.
 
 - [Confidential Inferencing](inference/README.md)
-
-The samples are provided on an As-Is basis. They are work-in-progress and should not be used in production. 
 
 ## Contributing
 
