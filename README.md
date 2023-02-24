@@ -1,6 +1,6 @@
 # Confidential AI
 
-The growing adoption of AI has natrually raised concerns regarding security and privacy of underlying datasets and models. 
+The growing adoption of AI has raised concerns regarding security and privacy of underlying datasets and models. 
 This repository contains samples demonstrating the use of Azure Confidential Computing for hosting AI workloads with strong security guarantees. 
 
 ## Confidential Computing Platform
