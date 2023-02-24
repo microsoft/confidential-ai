@@ -96,6 +96,24 @@ Upload encrypted models to storage container.
 ./upload_encrypted_models.sh
 ```
 
+## Custom MAA Endpoint Deployment
+This is an optional step in case the clients wish to delegate the verfication of the service's TEE configuration to an auditor. 
+
+Create a custom MAA instance
+```
+./create_maa.sh
+```
+
+Sign the attestation policy that will be enforced by the MAA instance. 
+```
+./sign_policy.sh
+```
+
+Set the attestation policy in the custom MAA instance
+```
+./set_policy.sh
+```
+
 ## Service Deployment
 ```
 cd ../deployment/confidential-aci

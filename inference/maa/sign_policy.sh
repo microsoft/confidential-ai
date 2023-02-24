@@ -24,5 +24,6 @@ rm policy.jws
 if [ -f "$rsaKeyFile" ]; then
     go run main.go -p /tmp/maa-policy.in -k $rsaKeyFile
 else
-    go run main.go -p /tmp/maa-policy.in -c
+    echo "Passing private_key.pem key file as default"
+    go run main.go -p /tmp/maa-policy.in -k private_key.pem
 fi

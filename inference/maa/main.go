@@ -31,24 +31,10 @@ func main() {
 	var err error
 
 	// flags declaration using flag package
-	flag.StringVar(&policyFile, "p", "", "Specify path to policy")
+	flag.StringVar(&policyFile, "p", "", "Specify path to policy [optional]")
 	flag.StringVar(&keyRSAPEMFile, "k", "", "Specify path to RSA key PEM file [optional]")
 	flag.BoolVar(&createX509Cert, "c", false, "Create x509 cert for signing key [optional]")
 	flag.Parse() // after declaring flags we need to call it
-
-	if flag.NArg() != 0 || len(policyFile) == 0 {
-		flag.Usage()
-		os.Exit(1)
-	}
-
-	// Read policy files
-	policyBytes, err := ioutil.ReadFile(policyFile)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println(string(policyBytes))
 
 	// Generate an RSA key or read existing RSA key
 	var privateRSAKey *rsa.PrivateKey
@@ -142,47 +128,64 @@ func main() {
 			return
 		}
 		publicRSAKeyCertFile.Close()
+
+		x5cFile, err := os.OpenFile("cert.raw", os.O_WRONLY|os.O_CREATE, 0644)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		x5cFile.Write([]byte(base64.StdEncoding.EncodeToString(certBytes)))
+		x5cFile.Close()
 	}
 
-	// Create payload for the attestation policy token
-	var payload MAAPolicyTokenPayload
-	payload.AttestationPolicy = base64.RawURLEncoding.EncodeToString(policyBytes)
-	payloadBytes, err := json.Marshal(payload)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	if policyFile != "" {
+		// Read policy files
+		policyBytes, err := ioutil.ReadFile(policyFile)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-	// Add the x509 certificate to the header
-	publicRSAKeyCertBytes, err := ioutil.ReadFile("cert.pem")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+		fmt.Println(string(policyBytes))
+		// Create payload for the attestation policy token
+		var payload MAAPolicyTokenPayload
+		payload.AttestationPolicy = base64.RawURLEncoding.EncodeToString(policyBytes)
+		payloadBytes, err := json.Marshal(payload)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-	data, _ := pem.Decode(publicRSAKeyCertBytes)
-	cert, err := x509.ParseCertificate(data.Bytes)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+		// Add the x509 certificate to the header
+		publicRSAKeyCertBytes, err := ioutil.ReadFile("cert.pem")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-	jwsHeaders := jws.NewHeaders()
-	var x5c []string
-	x5c = append(x5c, base64.StdEncoding.EncodeToString(cert.Raw))
-	jwsHeaders.Set(jws.X509CertChainKey, x5c)
-	jws, err := jws.Sign(payloadBytes, jwa.RS256, privateRSAKey, jws.WithHeaders(jwsHeaders))
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+		data, _ := pem.Decode(publicRSAKeyCertBytes)
+		cert, err := x509.ParseCertificate(data.Bytes)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-	policyJWSFile, err := os.OpenFile("policy.jws", os.O_WRONLY|os.O_CREATE, 0644)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+		jwsHeaders := jws.NewHeaders()
+		var x5c []string
+		x5c = append(x5c, base64.StdEncoding.EncodeToString(cert.Raw))
+		jwsHeaders.Set(jws.X509CertChainKey, x5c)
+		jws, err := jws.Sign(payloadBytes, jwa.RS256, privateRSAKey, jws.WithHeaders(jwsHeaders))
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-	policyJWSFile.Write(jws)
-	policyJWSFile.Close()
+		policyJWSFile, err := os.OpenFile("policy.jws", os.O_WRONLY|os.O_CREATE, 0644)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		policyJWSFile.Write(jws)
+		policyJWSFile.Close()
+	}
 }

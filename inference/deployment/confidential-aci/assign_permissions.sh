@@ -7,12 +7,12 @@ export AZURE_ASSIGNED_IDENTITY_SPID=$(az identity show --name $AZURE_USER_ASSIGN
 if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then 
   export AKV_SCOPE=`az keyvault show --name $AZURE_AKV_RESOURCE_NAME --query id --output tsv`
   echo "Assigning roles for $AZURE_AKV_RESOURCE_NAME to $AZURE_ASSIGNED_IDENTITY_SPID"  
-  
+
   az role assignment create --role "Key Vault Crypto Officer" --assignee-object-id $AZURE_ASSIGNED_IDENTITY_SPID --assignee-principal-type ServicePrincipal --scope $AKV_SCOPE
   az role assignment create --role "Key Vault Crypto User" --assignee-object-id $AZURE_ASSIGNED_IDENTITY_SPID --assignee-principal-type ServicePrincipal --scope $AKV_SCOPE
 elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
-
   echo "Assigning roles for $AZURE_AKV_RESOURCE_NAME to $AZURE_ASSIGNED_IDENTITY_SPID"
+
   az keyvault role assignment create --hsm-name $AZURE_AKV_RESOURCE_NAME --role "Managed HSM Crypto Officer" --assignee-object-id $AZURE_ASSIGNED_IDENTITY_SPID --assignee-principal-type ServicePrincipal --scope /keys
   az keyvault role assignment create --hsm-name $AZURE_AKV_RESOURCE_NAME --role "Managed HSM Crypto User" --assignee-object-id $AZURE_ASSIGNED_IDENTITY_SPID --assignee-principal-type ServicePrincipal  --scope /keys  
 fi

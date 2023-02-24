@@ -7,13 +7,13 @@ if [[ "$1" == "--sas" ]]; then
   export MODEL_SAS_TOKEN="?$MODEL_SAS_TOKEN"
 
   # Retrieve the token based on the sub-domain in the AKV resource endpoint
-  if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
-    AKV_TOKEN=$(az account get-access-token --resource https://vault.azure.net)
-    export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)    
-  elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
-    AKV_TOKEN=$(az account get-access-token --resource https://managedhsm.azure.net)
-    export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)  
-  fi
+  #if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
+  #  AKV_TOKEN=$(az account get-access-token --resource https://vault.azure.net)
+  #  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)    
+  #elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
+  #  AKV_TOKEN=$(az account get-access-token --resource https://managedhsm.azure.net)
+  #  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)  
+  #fi
 
   export URL_PRIVATE="false"
 else
@@ -29,7 +29,7 @@ export AZURE_AKV_KEY_DERIVATION_SALT=$(cat /tmp/importkey-config.json | jq '.key
 export AZURE_AKV_KEY_DERIVATION_LABEL=$(cat /tmp/importkey-config.json | jq '.key_derivation.label' | sed 's/\"//g')
 
 if [[ "$AZURE_MAA_ENDPOINT" == "" ]]; then
-  export AZURE_MAA_ENDPOINT = `az attestation show --name $AZURE_MAA_CUSTOM_RESOURCE_NAME --resource-group $AZURE_RESOURCE_GROUP --query attestUri --output tsv | awk '{split($0,a,"//"); print a[2]}'`
+  export AZURE_MAA_ENDPOINT=`az attestation show --name $AZURE_MAA_CUSTOM_RESOURCE_NAME --resource-group $AZURE_RESOURCE_GROUP --query attestUri --output tsv | awk '{split($0,a,"//"); print a[2]}'`
 fi
 
 TMP=$(jq . encrypted-filesystem-config-template.json)
@@ -40,7 +40,6 @@ TMP=`echo $TMP | \
   jq '.azure_filesystems[0].key.kty = env.AZURE_AKV_KEY_TYPE' | \
   jq '.azure_filesystems[0].key.authority.endpoint = env.AZURE_MAA_ENDPOINT' | \
   jq '.azure_filesystems[0].key.akv.endpoint = env.AZURE_AKV_RESOURCE_ENDPOINT' | \
-  jq '.azure_filesystems[0].key.akv.bearer_token = env.AKV_TOKEN' | \
   jq '.azure_filesystems[0].key_derivation.salt = env.AZURE_AKV_KEY_DERIVATION_SALT' | \
   jq '.azure_filesystems[0].key_derivation.label = env.AZURE_AKV_KEY_DERIVATION_LABEL'`
 

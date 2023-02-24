@@ -49,7 +49,7 @@ if [ "$AZURE_AKV_KEY_TYPE" = "RSA-HSM" ]; then
 fi
 
 if [[ "$AZURE_MAA_ENDPOINT" == "" ]]; then
-  export AZURE_MAA_ENDPOINT = `az attestation show --name $AZURE_MAA_CUSTOM_RESOURCE_NAME --resource-group $AZURE_RESOURCE_GROUP --query attestUri --output tsv | awk '{split($0,a,"//"); print a[2]}'`  
+  export AZURE_MAA_ENDPOINT=`az attestation show --name $AZURE_MAA_CUSTOM_RESOURCE_NAME --resource-group $AZURE_RESOURCE_GROUP --query attestUri --output tsv | awk '{split($0,a,"//"); print a[2]}'`  
 fi
 
 # Generate key import configuration.
