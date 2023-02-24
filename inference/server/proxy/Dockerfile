@@ -1,4 +1,4 @@
-FROM kapilvaswani/confidential-envoy:latest
+FROM mcr.microsoft.com/aci/ml-inference-demo-proxy:v1
 
 RUN sudo apt-get install -y gettext
 
