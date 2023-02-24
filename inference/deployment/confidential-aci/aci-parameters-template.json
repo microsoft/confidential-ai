@@ -20,7 +20,7 @@
   "EncfsSideCarArgs": {
     "value": ""
   },
-  "ProxySideCarMAAEndpoint": {
+  "MAAEndpoint": {
     "value": ""
   },
   "dnsNameLabel": {

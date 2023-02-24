@@ -23,7 +23,7 @@ TMP=`echo $TMP | jq '.containerRegistryPassword.value = env.CONTAINER_REGISTRY_P
 TMP=`echo $TMP | jq '.ccePolicy.value = env.CCE_POLICY'`
 TMP=`echo $TMP | jq '.modelSigningKey.value = env.MODEL_SIGNING_KEY'`
 TMP=`echo $TMP | jq '.EncfsSideCarArgs.value = env.ENCRYPTED_FILESYSTEM_INFORMATION'`
-TMP=`echo $TMP | jq '.ProxySideCarMAAEndpoint.value = env.AZURE_MAA_ENDPOINT'`
+TMP=`echo $TMP | jq '.MAAEndpoint.value = env.AZURE_MAA_ENDPOINT'`
 TMP=`echo $TMP | jq '.dnsNameLabel.value = env.DNS_NAME_LABEL'`
 echo $TMP > /tmp/aci-parameters.json
 

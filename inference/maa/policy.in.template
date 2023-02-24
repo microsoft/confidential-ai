@@ -6,8 +6,3 @@ authorizationrules
 && [type=="x-ms-compliance-status", value=="azure-compliant-uvm"]
 => permit();
 };
-
-issuancerules
-{
-=> issue(type="CompliantMLInferenceService", value=true);
-};

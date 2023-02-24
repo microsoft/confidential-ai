@@ -5,22 +5,10 @@ if [[ "$1" == "--sas" ]]; then
   MODEL_SAS_TOKEN=$(az storage blob generate-sas --account-name $AZURE_STORAGE_ACCOUNT_NAME --container-name $AZURE_STORAGE_CONTAINER_NAME --permissions r --name model.img --expiry $end --only-show-errors) 
   export MODEL_SAS_TOKEN="$(echo -n $MODEL_SAS_TOKEN | tr -d \")"
   export MODEL_SAS_TOKEN="?$MODEL_SAS_TOKEN"
-
-  # Retrieve the token based on the sub-domain in the AKV resource endpoint
-  #if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
-  #  AKV_TOKEN=$(az account get-access-token --resource https://vault.azure.net)
-  #  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)    
-  #elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
-  #  AKV_TOKEN=$(az account get-access-token --resource https://managedhsm.azure.net)
-  #  export AKV_TOKEN=$(echo $AKV_TOKEN | jq -r .accessToken)  
-  #fi
-
   export URL_PRIVATE="false"
 else
-  export URL_PRIVATE="true"
-  export AKV_TOKEN=""
+  export URL_PRIVATE="true"  
 fi
-
 
 # Retrieve the key type
 export AZURE_AKV_KEY_TYPE=$(cat /tmp/importkey-config.json | jq '.key.kty' | sed 's/\"//g')

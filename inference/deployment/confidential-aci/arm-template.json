@@ -77,7 +77,7 @@
         "description": "Remote file system information for storage sidecar."
       }
     },
-    "ProxySideCarMAAEndpoint": {
+    "MAAEndpoint": {
       "defaultValue": "secureString",
       "type": "string",
       "metadata": {
@@ -228,7 +228,7 @@
               "environmentVariables": [
                 {
                   "name": "MAA_ENDPOINT",
-                  "value": "[parameters('ProxySidecarMAAEndpoint')]"
+                  "value": "[parameters('MAAEndpoint')]"
                 }
               ],
               "ports": [
