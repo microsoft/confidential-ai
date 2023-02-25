@@ -8,5 +8,9 @@ echo ${MAA_CERTIFICATE_CONTENT} >> attestation-service-cert.pem
 echo "-----END CERTIFICATE-----" >> attestation-service-cert.pem
 openssl x509 -pubkey -noout -in attestation-service-cert.pem > attestation-service-key.pem
 
-envoy -c proxy-config.yaml
+if [[ -z "$ATTESTATION_POLICY" ]]; then
+  ATTESTATION_POLICY="ewp9"
+fi
 
+envsubst < proxy-config-template.yaml > proxy-config.yaml
+envoy -c proxy-config.yaml

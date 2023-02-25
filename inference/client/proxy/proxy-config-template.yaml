@@ -62,7 +62,8 @@ static_resources:
         attested_tls_context:
           validation_context:
             attestation_service_trusted_keys:
-                filename: attestation-service-key.pem
+              filename: attestation-service-key.pem
+            attestation_policy: $ATTESTATION_POLICY
         upstream_tls_context:
           common_tls_context:
             tls_params:

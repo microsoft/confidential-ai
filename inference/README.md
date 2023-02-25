@@ -92,7 +92,7 @@ cd ../deployment/confidential-aci
 ./deploy.sh
 ```
 ## Client Setup
-On the client, we will use the Triton client library  and sample applications to demonstrate how to setup secure and attested communication between a confidential container group and a client application. For attesting the server, we will use an enlightened client-side HTTP proxy based on Envoy, which supports an attested TLS protocol. 
+On the client, we will use the Triton client library and sample applications to demonstrate how to setup secure and attested communication between a confidential container group and a client application. For attesting the server, we will use an enlightened client-side HTTP proxy based on Envoy, which supports attested TLS. 
 
 First build the envory proxy using the following script. 
 
@@ -101,10 +101,46 @@ cd ../ci
 ./build_client.sh
 ```
 
-This will build a container image called ```inference-client-proxy```. Deploy this container where it is reachable from all your clients. For example, you can use docker to deploy the proxy locally. 
+This will build a container image called ```inference-client-proxy```. 
+
+Next, we will generate a client-side attestation policy. This is a set of claims (expressed as a json object) that must hold in the attestation token from the service during attested TLS. For example, the following attestation policy specifies a number of claims including a specific ```hostdata``` value. 
+
+```json
+{
+  "x-ms-attestation-type": "sevsnpvm",
+  "x-ms-compliance-status": "azure-compliant-cvm",
+  "x-ms-sevsnpvm-bootloader-svn": 3,
+  "x-ms-sevsnpvm-hostdata": "16281d25aa3713ca0285e1161430c80b159daa54681063d6efc35edb53ac448e",
+  "x-ms-sevsnpvm-is-debuggable": false
+}
+```
+
+Alternatively, if policy enforcement has been delegated to MAA, clients can be configured with the following borader policy. 
+```json
+{
+  "x-ms-attestation-type": "sevsnpvm",
+  "x-ms-compliance-status": "azure-compliant-cvm",
+  "x-ms-sevsnpvm-bootloader-svn": 3,
+  "x-ms-policy-signer": {    
+    "kty": "RSA",    
+    "x5c": [      
+      "MIIDpjC..."
+    ]  
+  },
+  "x-ms-sevsnpvm-is-debuggable": false
+}
+```
+
+Use the following script to generate a suitable attestation policy.
+```
+cd ../client
+export ATTESTATION_POLICY=$(./generate_attestation_policy.sh [-signer|--hostdata])
+``` 
+
+Now, deploy the proxy where it is reachable from all your clients. For example, you can use docker to deploy the proxy locally. 
 
 ```
-docker run -it --privileged --network host --env MAA_ENDPOINT=sharedeus2.eus2.test.attest.azure.net inference-client-proxy /bin/bash -c ./bootstrap.sh
+docker run -it --privileged --network host --env MAA_ENDPOINT=$AZURE_MAA_ENDPOINT --env ATTESTATION_POLICY=$ATTESTATION_POLICY inference-client-proxy /bin/bash -c ./bootstrap.sh
 ```
 The proxy will listen for incoming requests on port 15001.
 
@@ -129,7 +165,7 @@ http_proxy=http://127.0.0.1:15001 ./image_client -m densenet_onnx -c 3 -s INCEPT
 ```
 Setting the ```http_proxy``` environment variable redirects all HTTP traffic via the proxy, which establishes an attested TLS connection with the server. All subsequent requests and responses are encrypted with keys negotiatiated after the server has proven that it is running in a confidential container instance with a complaint UVM kernel and expected container security policy. 
 
-If all goes well, you should receive an inference response as follows.
+If all goes well and the inferencing service meets the configured attestation policy, you should receive an inference response as follows.
 ```
 Request 0, batch size 1
 Image '../../images/mug.jpg':

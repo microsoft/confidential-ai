@@ -1,0 +1,7 @@
+{
+  "x-ms-attestation-type": "sevsnpvm",
+  "x-ms-compliance-status": "azure-compliant-cvm",
+  "x-ms-sevsnpvm-bootloader-svn": 3,
+  "x-ms-sevsnpvm-hostdata": "",
+  "x-ms-sevsnpvm-is-debuggable": false
+}

@@ -1,0 +1,3 @@
+echo Computing CCE policy...
+envsubst < ../policy/policy-in-template.json > /tmp/policy-in.json
+CCE_POLICY=$(az confcom acipolicygen -i /tmp/policy-in.json)
