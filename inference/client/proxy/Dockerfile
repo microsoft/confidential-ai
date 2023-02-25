@@ -4,7 +4,7 @@ RUN sudo apt-get install -y gettext
 
 WORKDIR "/home/envoy"
 
-COPY proxy-config.yaml proxy-config.yaml
+COPY proxy-config-template.yaml proxy-config-template.yaml
 COPY --chmod=755 bootstrap.sh bootstrap.sh
 
 USER "envoy"
