@@ -121,11 +121,11 @@ Alternatively, if policy enforcement has been delegated to MAA, clients can be c
   "x-ms-attestation-type": "sevsnpvm",
   "x-ms-compliance-status": "azure-compliant-cvm",
   "x-ms-sevsnpvm-bootloader-svn": 3,
-  "x-ms-policy-signer": {    
-    "kty": "RSA",    
-    "x5c": [      
+  "x-ms-policy-signer": {
+    "kty": "RSA",
+    "x5c": [ 
       "MIIDpjC..."
-    ]  
+    ]
   },
   "x-ms-sevsnpvm-is-debuggable": false
 }
