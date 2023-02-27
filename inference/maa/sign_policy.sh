@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 while getopts ":k:" options; do
     case $options in
         k)rsaKeyFile=$OPTARG;;    
