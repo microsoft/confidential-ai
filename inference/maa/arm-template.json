@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+      "_generator": {
+        "name": "bicep",
+        "version": "0.5.6.12127",
+        "templateHash": "9350596888842621478"
+      }
+    },
+    "parameters": {
+      "attestationProviderName": {
+        "type": "string",
+        "defaultValue": "secureString",
+        "metadata": {
+            "description": "Name for MAA endpoint"
+          }
+      },       
+      "location": {
+        "type": "string",
+        "defaultValue": "[resourceGroup().location]",
+        "metadata": {
+          "description": "Location for all resources."
+        }
+      },
+      "policySigningCertificates": {
+        "type": "string",
+        "defaultValue": "secureString",
+        "metadata": {
+            "description": "Signing certificate for policy"
+          }
+      }
+    },
+    "variables": {
+      "PolicySigningCertificates": {
+        "PolicySigningCertificates": {
+          "keys": [
+            {
+              "kty": "RSA",
+              "use": "sig",
+              "x5c": [
+                "[parameters('policySigningCertificates')]"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Attestation/attestationProviders",
+        "apiVersion": "2021-06-01-preview",
+        "name": "[parameters('attestationProviderName')]",
+        "location": "[parameters('location')]",
+        "properties": "[if(empty(parameters('policySigningCertificates')), json('{}'), variables('PolicySigningCertificates'))]"
+      }
+    ],
+    "outputs": {
+      "attestationName": {
+        "type": "string",
+        "value": "[parameters('attestationProviderName')]"
+      }
+    }
+  }
