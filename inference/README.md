@@ -108,7 +108,7 @@ Next, we will generate a client-side attestation policy. This is a set of claims
 ```json
 {
   "x-ms-attestation-type": "sevsnpvm",
-  "x-ms-compliance-status": "azure-compliant-cvm",
+  "x-ms-compliance-status": "azure-compliant-uvm",
   "x-ms-sevsnpvm-bootloader-svn": 3,
   "x-ms-sevsnpvm-hostdata": "16281d25aa3713ca0285e1161430c80b159daa54681063d6efc35edb53ac448e",
   "x-ms-sevsnpvm-is-debuggable": false
@@ -119,7 +119,7 @@ Alternatively, if policy enforcement has been delegated to MAA, clients can be c
 ```json
 {
   "x-ms-attestation-type": "sevsnpvm",
-  "x-ms-compliance-status": "azure-compliant-cvm",
+  "x-ms-compliance-status": "azure-compliant-uvm",
   "x-ms-sevsnpvm-bootloader-svn": 3,
   "x-ms-policy-signer": {
     "kty": "RSA",
@@ -134,7 +134,7 @@ Alternatively, if policy enforcement has been delegated to MAA, clients can be c
 Use the following script to generate a suitable attestation policy.
 ```
 cd ../client
-export ATTESTATION_POLICY=$(./generate_attestation_policy.sh [-signer|--hostdata])
+./generate_attestation_policy.sh [--signer|--hostdata]
 ``` 
 
 Now, deploy the proxy where it is reachable from all your clients. For example, you can use docker to deploy the proxy locally. 
