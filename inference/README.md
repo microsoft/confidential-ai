@@ -110,12 +110,13 @@ Next, we will generate a client-side attestation policy. This is a set of claims
   "x-ms-attestation-type": "sevsnpvm",
   "x-ms-compliance-status": "azure-compliant-uvm",
   "x-ms-sevsnpvm-bootloader-svn": 3,
-  "x-ms-sevsnpvm-hostdata": "16281d25aa3713ca0285e1161430c80b159daa54681063d6efc35edb53ac448e",
+  "x-ms-sevsnpvm-hostdata": "[SHA256 hash digest of container security policy]",
   "x-ms-sevsnpvm-is-debuggable": false
 }
 ```
 
-Alternatively, if policy enforcement has been delegated to MAA, clients can be configured with the following borader policy. 
+Alternatively, clients are willing to trust a remote attestation service to enforce policies, they can be configured with the following policy which only checked for the policy signing key. This policy is more stable; it allows for the service to be upgraded without clients to be upgraded. 
+
 ```json
 {
   "x-ms-attestation-type": "sevsnpvm",
@@ -124,7 +125,7 @@ Alternatively, if policy enforcement has been delegated to MAA, clients can be c
   "x-ms-policy-signer": {
     "kty": "RSA",
     "x5c": [ 
-      "MIIDpjC..."
+      "<PEM encoded policy signing key>"
     ]
   },
   "x-ms-sevsnpvm-is-debuggable": false
