@@ -16,6 +16,13 @@
         "description": "Location for all resources."
       }
     },
+    "userAssignedIdentity": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "User-managed identity required for accessing Azure Storage and Azure Key Vault"
+      }
+    },    
     "containerRegistry": {
       "defaultValue": "secureString",
       "type": "string",
@@ -70,6 +77,13 @@
         "description": "Remote file system information for storage sidecar."
       }
     },
+    "MAAEndpoint": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "Proxy sidecar MAA endpoint"
+      }
+    },    
     "dnsNameLabel": {
       "defaultValue": "secureSring",
       "type": "string",
@@ -93,6 +107,12 @@
       "apiVersion": "2022-04-01-preview",
       "name": "[parameters('name')]",
       "location": "[parameters('location')]",
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "[parameters('userAssignedIdentity')]": {}
+        }
+      },      
       "properties": {
         "confidentialComputeProperties": {
           "isolationType": "SevSnp",
@@ -208,7 +228,7 @@
               "environmentVariables": [
                 {
                   "name": "MAA_ENDPOINT",
-                  "value": "sharedeus2.eus2.test.attest.azure.net"
+                  "value": "[parameters('MAAEndpoint')]"
                 }
               ],
               "ports": [

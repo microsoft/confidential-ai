@@ -65,8 +65,8 @@
       "environmentVariables": [
         {
           "name": "MAA_ENDPOINT",
-          "value": "sharedeus2.eus2.test.attest.azure.net",
-          "strategy": "string"
+          "value" : ".+",
+          "strategy" : "re2"
         }
       ]
     }

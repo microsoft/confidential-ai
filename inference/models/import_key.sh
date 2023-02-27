@@ -49,10 +49,15 @@ if [ "$AZURE_AKV_KEY_TYPE" = "RSA-HSM" ]; then
     export AZURE_AKV_KEY_DERIVATION_LABEL="Model Encryption Key"
 fi
 
+if [[ "$AZURE_MAA_ENDPOINT" == "" ]]; then
+  export AZURE_MAA_ENDPOINT=`az attestation show --name $AZURE_MAA_CUSTOM_RESOURCE_NAME --resource-group $AZURE_RESOURCE_GROUP --query attestUri --output tsv | awk '{split($0,a,"//"); print a[2]}'`  
+fi
+
 # Generate key import configuration.
 CONFIG=$(jq '.claims[0][0].equals = env.CCE_POLICY_HASH' importkey-config-template.json)
 CONFIG=$(echo $CONFIG | jq '.key.kid = "ModelFilesystemEncryptionKey"')
 CONFIG=$(echo $CONFIG | jq '.key.kty = env.AZURE_AKV_KEY_TYPE')
+CONFIG=$(echo $CONFIG | jq '.key.authority.endpoint = env.AZURE_MAA_ENDPOINT')
 CONFIG=$(echo $CONFIG | jq '.key_derivation.salt = env.AZURE_AKV_KEY_DERIVATION_SALT')
 CONFIG=$(echo $CONFIG | jq '.key_derivation.label = env.AZURE_AKV_KEY_DERIVATION_LABEL')
 CONFIG=$(echo $CONFIG | jq '.key.akv.endpoint = env.AZURE_AKV_RESOURCE_ENDPOINT')
