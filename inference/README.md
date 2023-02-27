@@ -164,7 +164,7 @@ Alternatively, clients are willing to trust a remote attestation service to enfo
 Use the following script to generate a suitable attestation policy.
 ```
 cd ../client
-./generate_attestation_policy.sh [--signer|--hostdata]
+source ./generate_attestation_policy.sh [--policysigner|--hostdata]
 ``` 
 
 Now, deploy the proxy where it is reachable from all your clients. For example, you can use docker to deploy the proxy locally. 
