@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  inference-server:
+    image: inference-server
+    command: [ "/opt/tritonserver/bin/tritonserver", "--model-repository=/models" ]
+    ports:
+      - 8001:8001
+      - 8002:8002
+    volumes:
+      - /home/kapilv/confidential-ai/inference/models/model_repository:/models:ro
+    network_mode: "host"

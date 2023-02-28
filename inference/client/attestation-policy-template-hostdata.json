@@ -1,0 +1,6 @@
+{
+  "x-ms-attestation-type": "sevsnpvm",
+  "x-ms-compliance-status": "azure-compliant-uvm",
+  "x-ms-sevsnpvm-hostdata": "",
+  "x-ms-sevsnpvm-is-debuggable": false
+}

@@ -1,0 +1,275 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "defaultValue": "confidential-inference",
+      "type": "string",
+      "metadata": {
+        "description": "Name for the container group"
+      }
+    },
+    "location": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "userAssignedIdentity": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "User-managed identity required for accessing Azure Storage and Azure Key Vault"
+      }
+    },    
+    "containerRegistry": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },
+    "containerRegistryUsername": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },
+    "containerRegistryPassword": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "The container registry login server."
+      }
+    },    
+    "restartPolicy": {
+      "defaultValue": "Never",
+      "allowedValues": [
+        "Always",
+        "Never",
+        "OnFailure"
+      ],
+      "type": "string",
+      "metadata": {
+        "description": "The behavior of Azure runtime if container has stopped."
+      }
+    },
+    "ccePolicy": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "cce policy"
+      }
+    },
+    "modelSigningKey": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "modelSigningKey"
+      }
+    },
+    "EncfsSideCarArgs": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "Remote file system information for storage sidecar."
+      }
+    },
+    "MAAEndpoint": {
+      "defaultValue": "secureString",
+      "type": "string",
+      "metadata": {
+        "description": "Proxy sidecar MAA endpoint"
+      }
+    },    
+    "dnsNameLabel": {
+      "defaultValue": "secureSring",
+      "type": "string",
+      "metadata": {
+        "description": "DNS name of this service"
+      }
+    }
+  },
+  "variables": {
+    "imageRegistryCredentials": [
+      {
+        "server": "[parameters('containerRegistry')]",
+        "username": "[parameters('containerRegistryUsername')]",
+        "password": "[parameters('containerRegistryPassword')]"
+      }
+    ]
+  },  
+  "resources": [
+    {
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2022-04-01-preview",
+      "name": "[parameters('name')]",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "[parameters('userAssignedIdentity')]": {}
+        }
+      },      
+      "properties": {
+        "confidentialComputeProperties": {
+          "isolationType": "SevSnp",
+          "ccePolicy": "[parameters('ccePolicy')]"
+        },
+        "initContainers": [
+          {
+            "name": "inference-init",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-init:latest')]",
+              "command": [
+                "/bin/sh",
+                "setup-iptables.sh"
+              ]
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "inference-server",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-server:latest')]",
+              "command": [
+                "/bin/bash",
+                "/opt/verify/verify_and_run.sh",
+                "[parameters('modelSigningKey')]",
+                "/mnt/remote/models"
+              ],
+              "ports": [
+                {
+                  "port": 8000,
+                  "protocol": "TCP"
+                },
+                {
+                  "port": 8001,
+                  "protocol": "TCP"
+                }
+              ],
+              "volumeMounts": [
+                {
+                  "name": "remotemounts",
+                  "mountPath": "/mnt/remote"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 3,
+                  "memoryInGB": 3
+                }
+              }
+            }
+          },
+          {
+            "name": "encrypted-storage-sidecar",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-encfs:latest')]",
+              "command": [
+                "/encfs.sh"                
+              ],
+              "environmentVariables": [
+                {
+                  "name": "EncfsSideCarArgs",
+                  "value": "[parameters('EncfsSideCarArgs')]"
+                }
+              ],
+              "volumeMounts": [
+                {
+                  "name": "remotemounts",
+                  "mountPath": "/mnt/remote"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 0.4,
+                  "memoryInGB": 2
+                }
+              }
+            }
+          },
+          {
+            "name": "skr-sidecar",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-skr:latest')]",
+              "command" : [
+                "/bin/sh",
+                "skr.sh",
+                "ewp9",
+                "8284"
+              ],
+              "environmentVariables": [],
+              "ports": [
+                {
+                  "port": 8284,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 0.2,
+                  "memoryInGB": 0.5
+                }
+              }
+            }
+          },
+          {
+            "name": "inference-proxy",
+            "properties": {
+              "image": "[concat(parameters('containerRegistry'), '/inference-proxy:latest')]",
+              "command": [
+                "/bin/sh",
+                "bootstrap.sh"
+              ],
+              "environmentVariables": [
+                {
+                  "name": "MAA_ENDPOINT",
+                  "value": "[parameters('MAAEndpoint')]"
+                }
+              ],
+              "ports": [
+                {
+                  "port": 15001,
+                  "protocol": "TCP"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 0.4,
+                  "memoryInGB": 1.5
+                }
+              }
+            }
+          }
+        ],
+        "osType": "Linux",
+        "restartPolicy": "[parameters('restartPolicy')]",
+        "ipAddress": {
+          "type": "Public",
+          "ports": [
+            {
+              "port": 8000,
+              "protocol": "TCP"
+            },
+            {
+              "port": 8001,
+              "protocol": "TCP"
+            }
+          ],
+          "dnsNameLabel": "[parameters('dnsNameLabel')]"
+        },
+        "volumes": [
+          {
+            "name": "remotemounts",
+            "emptydir": {}
+          }
+        ],
+        "imageRegistryCredentials": "[if(equals(parameters('containerRegistryUsername'),''), json('null'), variables('imageRegistryCredentials'))]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "userAssignedIdentity": {
+    "value": ""
+  },
+  "containerRegistry": {
+    "value": ""
+  },
+  "containerRegistryUsername": {
+    "value": ""
+  },
+  "containerRegistryPassword": {
+    "value": ""
+  },
+  "ccePolicy": {
+    "value": ""
+  },
+  "modelSigningKey": {
+    "value": ""
+  },
+  "EncfsSideCarArgs": {
+    "value": ""
+  },
+  "MAAEndpoint": {
+    "value": ""
+  },
+  "dnsNameLabel": {
+    "value": ""
+  }
+}

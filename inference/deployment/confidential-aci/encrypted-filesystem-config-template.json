@@ -1,0 +1,26 @@
+{
+  "azure_filesystems": [
+    {
+      "azure_url": "",
+      "azure_url_private": true,
+      "mount_point": "",
+      "key":{
+        "kid": "",
+        "kty": "",
+        "authority": {
+            "endpoint": ""
+        },
+        "akv": {
+            "endpoint": "",
+            "api_version": "api-version=7.3",
+            "bearer_token": ""
+        }
+      },
+      "key_derivation":
+      {
+        "salt": "",
+        "label": ""
+      }
+    }
+  ] 
+}

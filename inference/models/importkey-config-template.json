@@ -1,0 +1,29 @@
+{
+  "key":{
+      "kid": "",
+      "kty": "",
+      "authority": {
+          "endpoint": ""
+      },
+      "akv": {
+          "endpoint": "",
+          "api_version": "api-version=7.3",
+          "bearer_token": ""
+      }
+  },
+  "key_derivation":
+  {
+    "salt": "",
+    "label": ""
+  },  
+  "claims": [
+    [{
+      "claim": "x-ms-sevsnpvm-hostdata",
+      "equals": ""
+    },
+    {
+      "claim": "x-ms-compliance-status",
+      "equals": "azure-compliant-uvm"
+    }]
+  ]
+}
