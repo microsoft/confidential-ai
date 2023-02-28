@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 while getopts ":t:s:" options; do
     case $options in
         t)kty=$OPTARG;;

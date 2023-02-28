@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 while getopts ":d:k:i:" options; do
     case $options in 
         d)dataPath=$OPTARG;;

@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 # Obtain token validation certificate
 MAA_OPENID_RESPONSE=`curl -X GET https://$MAA_ENDPOINT/.well-known/openid-configuration`
 JWKS_URI=`echo $MAA_OPENID_RESPONSE | jq -r .jwks_uri`

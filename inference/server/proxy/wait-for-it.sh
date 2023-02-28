@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 # Use this script to test if a given TCP host/port are available
 
 WAITFORIT_cmdname=${0##*/}

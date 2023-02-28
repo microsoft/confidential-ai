@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 ## AKV 
 echo $AZURE_AKV_RESOURCE_ENDPOINT
 export AZURE_AKV_RESOURCE_NAME=`echo $AZURE_AKV_RESOURCE_ENDPOINT | awk '{split($0,a,"."); print a[1]}'`

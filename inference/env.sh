@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 export CONTAINER_REGISTRY=
 export CONTAINER_REGISTRY_USERNAME=
 export CONTAINER_REGISTRY_PASSWORD=

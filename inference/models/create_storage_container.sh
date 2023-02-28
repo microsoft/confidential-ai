@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 az storage account create \
     --resource-group $AZURE_RESOURCE_GROUP \
     --name $AZURE_STORAGE_ACCOUNT_NAME

@@ -1,4 +1,8 @@
 #! /bin/bash
+
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 export SKR_PORT=${SKR_PORT:-8284} 
 ./wait-for-it.sh --timeout=100  --strict 127.0.0.1:${SKR_PORT} -- echo "SKR sidecar available"
 

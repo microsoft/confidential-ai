@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 DOCKER_BUILDKIT=1 docker build ${PWD}/../server/triton -t inference-server 
 DOCKER_BUILDKIT=1 docker build ${PWD}/../server/proxy -t inference-proxy
 DOCKER_BUILDKIT=1 docker build ${PWD}/../server/init -t inference-init

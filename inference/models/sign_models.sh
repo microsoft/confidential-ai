@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 # Generate signing keys
 openssl ecparam -genkey -name secp384r1 -noout -out signing_private.pem
 openssl ec -in signing_private.pem -pubout -out signing_public.pem

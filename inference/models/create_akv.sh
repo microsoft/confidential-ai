@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 echo $AZURE_AKV_RESOURCE_ENDPOINT
 echo $AZURE_RESOURCE_GROUP
 

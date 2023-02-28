@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 ACCOUNT_KEY=$(az storage account keys list --account-name $AZURE_STORAGE_ACCOUNT_NAME --only-show-errors | jq -r .[0].value)
 
 echo Uploading to $AZURE_STORAGE_ACCOUNT_NAME  $AZURE_STORAGE_CONTAINER_NAME

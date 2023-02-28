@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 # ONNX densenet
 mkdir -p model_repository/densenet_onnx
 wget -O model_repository/densenet_onnx/config.pbtxt \

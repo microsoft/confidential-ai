@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 # first attribute base64-encoded public key pem 
 # second attribute path to models directory
 

@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 containers=("inference-server:latest" "inference-proxy:latest" "inference-init:latest" "encfs:latest" "skr:latest")
 for container in "${containers[@]}"
 do
