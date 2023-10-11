@@ -1,0 +1,12 @@
+include:
+  - ../external/genai-stack/docker-compose.yml
+    
+services:
+  proxy-ws:
+    build:
+      context: .
+      dockerfile: ../proxy/Dockerfile
+    ports:
+    - "${PORT_PROXY0:-10000}:10000"
+    environment:
+      - MAA_ENDPOINT=sharedeus2.eus2.attest.azure.net

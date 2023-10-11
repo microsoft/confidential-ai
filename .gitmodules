@@ -1,3 +1,9 @@
 [submodule "inference/external/confidential-sidecar-containers"]
 	path = inference/external/confidential-sidecar-containers
 	url = https://github.com/microsoft/confidential-sidecar-containers
+[submodule "rag/external/genai-stack"]
+	path = rag/external/genai-stack
+	url = https://github.com/docker/genai-stack
+[submodule "rag/external/confidential-computing-cvm-guest-attestation"]
+	path = rag/external/confidential-computing-cvm-guest-attestation
+	url = git@github.com:Azure/confidential-computing-cvm-guest-attestation.git
