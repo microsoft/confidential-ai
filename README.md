@@ -16,7 +16,7 @@ These samples are based on several confidential computing platform components an
 Samples include the following workloads.
 
 - [Confidential Inferencing](inference/README.md)
-
+- [Confidential Retrieval Augmented Generation](rag/README.md)
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
