@@ -4,9 +4,15 @@ include:
 services:
   proxy-ws:
     build:
-      context: .
-      dockerfile: ../proxy/Dockerfile
+      context: ./proxy
+      dockerfile: Dockerfile
     ports:
     - "${PORT_PROXY0:-10000}:10000"
     environment:
       - MAA_ENDPOINT=sharedeus2.eus2.attest.azure.net
+    command: [ "/bin/sh", "bootstrap.sh" ]
+    privileged: true
+    volumes:
+      - /sys/kernel/security:/sys/kernel/security:rw
+    networks:
+      - net
