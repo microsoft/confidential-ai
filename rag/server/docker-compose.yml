@@ -7,7 +7,7 @@ services:
       context: ./proxy
       dockerfile: Dockerfile
     ports:
-    - "${PORT_PROXY0:-10000}:10000"
+    - "${PORT_PROXY0:-15006}:15006"
     environment:
       - MAA_ENDPOINT=sharedeus2.eus2.attest.azure.net
     command: [ "/bin/sh", "bootstrap.sh" ]

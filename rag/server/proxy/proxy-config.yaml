@@ -5,19 +5,29 @@ static_resources:
       socket_address:
         address: 0.0.0.0
         port_value: 15006
-    listener_filters:
-    - name: "envoy.filters.listener.original_dst"
-      typed_config:
-        "@type": type.googleapis.com/envoy.extensions.filters.listener.original_dst.v3.OriginalDst
-    - name: "envoy.filters.listener.http_inspector"
-      typed_config:
-        "@type": type.googleapis.com/envoy.extensions.filters.listener.http_inspector.v3.HttpInspector
-    - name: "envoy.filters.listener.tls_inspector"
-      typed_config:
-        "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector        
     filter_chains:
-    - filter_chain_match:
-        transport_protocol: tls
+    - filters:
+      - name: envoy.filters.network.http_connection_manager
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+          stat_prefix: ingress_wss_to_wss
+          upgrade_configs:
+          - upgrade_type: websocket
+          route_config:
+            name: local_route
+            virtual_hosts:
+            - name: app
+              domains:
+              - "*"
+              routes:
+              - match:
+                  prefix: "/"
+                route:
+                  cluster: service_wss
+          http_filters:
+          - name: envoy.filters.http.router
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
       transport_socket:
         name: envoy.transport_sockets.att_tls
         typed_config:
@@ -45,38 +55,13 @@ static_resources:
                   filename: keys/server-key.pem
               validation_context:
                 trust_chain_verification: ACCEPT_UNTRUSTED
-      filters:
-      - name: envoy.filters.network.http_connection_manager
-        typed_config: 
-          '@type': "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
-          stat_prefix: inbound_proxy
-          upgrade_configs:
-          - upgrade_type: websocket
-          forward_client_cert_details: ALWAYS_FORWARD_ONLY
-          route_config: 
-            name: all
-            virtual_hosts:
-            - name: inbound-pass-through
-              domains: ["*"]
-              routes:
-              - match:
-                  prefix: "/"
-                route:
-                  cluster: inbound-pass-through
-          http_filters:
-          - name: envoy.filters.http.router
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
-          access_log:
-          - name: envoy.access_loggers.stdout
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+
   clusters:
-  - name: inbound-pass-through
+  - name: service_wss
     type: STRICT_DNS
     lb_policy: ROUND_ROBIN
     load_assignment:
-      cluster_name: inbound-pass-through
+      cluster_name: service_wss
       endpoints:
       - lb_endpoints:
         - endpoint:

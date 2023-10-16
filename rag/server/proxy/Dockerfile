@@ -16,9 +16,6 @@ RUN apt-get install -y git
 
 WORKDIR "/home/envoy"
 
-COPY proxy-config.yaml proxy-config.yaml
-COPY --chmod=755 bootstrap.sh bootstrap.sh
-
 RUN wget https://packages.microsoft.com/repos/azurecore/pool/main/a/azguestattestation1/azguestattestation1_1.0.5_amd64.deb
 RUN dpkg -i azguestattestation1_1.0.5_amd64.deb
 
@@ -30,3 +27,6 @@ RUN cmake .
 RUN make
 
 WORKDIR "/home/envoy"
+
+COPY proxy-config.yaml proxy-config.yaml
+COPY --chmod=755 bootstrap.sh bootstrap.sh
