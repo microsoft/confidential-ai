@@ -1,0 +1,10 @@
+openai
+python-dotenv
+wikipedia
+tiktoken
+neo4j
+streamlit
+sentence_transformers==2.2.2
+Pillow
+PyPDF2
+torch==2.0.1

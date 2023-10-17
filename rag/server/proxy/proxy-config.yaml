@@ -67,5 +67,5 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: bot
-                port_value: 8501
+                address: flask-bot
+                port_value: 8504

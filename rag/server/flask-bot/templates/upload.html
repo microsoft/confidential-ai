@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat with your PDF</title>
+  <style>
+    body {
+      background-color: #333;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    #container {
+      background-color: #454343;
+      padding: 20px;
+      margin: 20px;
+      width: 30%;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    #file-upload {
+      display: none;
+    }
+
+    #file-label {
+      padding: 10px;
+      background-color: #888;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #query-input {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      background-color: #444;
+      color: #fff;
+      display: none;
+    }
+
+    #response-box {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      height: 150px;
+      border: none;
+      background-color: #444;
+      color: #fff;
+      overflow-y: scroll;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Chat with your PDF</h2>
+  <div id="container">
+    <!-- File Upload -->
+    <h4>Upload your files</h4>
+    <label for="file-upload" id="file-label">
+      Browse Files
+    </label>
+    <input type="file" id="file-upload" accept=".pdf">
+
+    <!-- Query Input -->
+    <input type="text" id="query-input" placeholder="Enter your query..." onkeypress="handleKeyPress(event)">
+
+    <!-- Response Box -->
+    <textarea id="response-box" readonly></textarea>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('file-upload');
+    const queryInput = document.getElementById('query-input');
+    const responseBox = document.getElementById('response-box');
+
+    fileInput.addEventListener('change', handleFileUpload);
+
+    function handleFileUpload() {
+      const file = fileInput.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch('/uploader', {
+          method: 'POST',
+          body: formData,
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.text();
+            } else {
+              throw new Error('File upload failed.');
+            }
+          })
+          .then(responseText => {
+            // Show the query and response boxes
+            queryInput.style.display = 'block';
+            responseBox.style.display = 'block';
+          })
+          .catch(error => {
+            responseBox.value = `Error: ${error.message}`;
+          });
+      }
+    }
+
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        const query = queryInput.value;
+
+        if (query) {
+          // Send the query to the server
+          fetch('/query', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'text/plain',
+            },
+            body: query,
+          })
+            .then(response => {
+              if (response.ok) {
+                return response.text();
+              } else {
+                throw new Error('Query failed.');
+              }
+            })
+            .then(responseText => {
+              responseBox.value += `\nQuery: ${query}\nServer Response: ${responseText}`;
+              queryInput.value = ''; // Clear the input field
+            })
+            .catch(error => {
+              responseBox.value += `\nError: ${error.message}`;
+            });
+        }
+      }
+    }
+
+  </script>
+</body>
+
+</html>
