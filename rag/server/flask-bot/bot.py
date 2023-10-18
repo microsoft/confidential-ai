@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, Response
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from langchain.chains import RetrievalQA
@@ -88,26 +88,19 @@ def upload_file():
         )
         return response
 
-@app.route('/query', methods =['POST'])
+
+@app.route('/query', methods=['POST'])
 def query():
     # Accept user questions/query
     content_type = request.headers.get('Content-Type')
     if (content_type == 'text/plain'):
-        query = request.data.decode('utf-8')
+        query = request.get_data(as_text=True)
+        print("Processing query: " + query)
     else:
         return 'Content-Type not supported!'
 
-    if query:
-        stream_handler = StreamHandler([])
-        qa.run(query, callbacks=[stream_handler])
-
-    response = app.response_class(
-        response=request.data.decode('utf-8'),
-        status=200,
-        mimetype='text/plain'
-    )
-    return response
-
+    completion = qa.run(query)
+    return Response(completion, content_type='text/plain');
 
 if __name__ == '__main__':
    app.run(host='0.0.0.0', port=8504)

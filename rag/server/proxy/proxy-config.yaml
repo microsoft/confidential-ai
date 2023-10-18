@@ -24,6 +24,7 @@ static_resources:
                   prefix: "/"
                 route:
                   cluster: service_wss
+                  timeout: 300s
           http_filters:
           - name: envoy.filters.http.router
             typed_config:
