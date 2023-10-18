@@ -9,16 +9,28 @@
     body {
       background-color: #333;
       color: #fff;
-      font-family: Arial, sans-serif;
+      font: normal 16px/normal sans-serif;
     }
 
     #container {
       background-color: #454343;
       padding: 20px;
-      margin: 20px;
+      margin-top: 100px;
+      margin: auto;
       width: 30%;
       border-radius: 10px;
       text-align: left;
+    }
+
+    #query {
+      background-color: #454343;
+      padding: 20px;
+      margin-top: 20px;
+      margin: auto;
+      width: 30%;
+      border-radius: 10px;
+      text-align: left;
+      display: none;
     }
 
     #file-upload {
@@ -32,41 +44,48 @@
       cursor: pointer;
     }
 
+    #query-label {
+      padding: 10px;
+      background-color: #888;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
     #query-input {
       margin-top: 20px;
       padding: 10px;
-      width: 100%;
+      width: 90%;
       border: none;
-      background-color: #444;
+      background-color: #252424;
       color: #fff;
-      display: none;
     }
 
     #response-box {
       margin-top: 20px;
       padding: 10px;
-      width: 100%;
+      width: 90%;
       height: 150px;
       border: none;
-      background-color: #444;
       color: #fff;
-      overflow-y: scroll;
-      display: none;
+      background-color: #454343;
+      font: normal 16px/normal sans-serif;
     }
   </style>
 </head>
 
 <body>
-  <h2>Chat with your PDF</h2>
+  <div style="text-align:center;">
+    <h2>Chat with your data</h2>
+  </div>  
   <div id="container">
     <!-- File Upload -->
-    <h4>Upload your files</h4>
-    <label for="file-upload" id="file-label">
-      Browse Files
-    </label>
+    <label for="file-upload" id="file-label">Browse Files</label>
     <input type="file" id="file-upload" accept=".pdf">
+  </div>
 
+  <div id="query">
     <!-- Query Input -->
+    <label for="query-input" id="query-label">Ask questions about your data</label>
     <input type="text" id="query-input" placeholder="Enter your query..." onkeypress="handleKeyPress(event)">
 
     <!-- Response Box -->
@@ -75,6 +94,7 @@
 
   <script>
     const fileInput = document.getElementById('file-upload');
+    const queryContainer = document.getElementById('query');
     const queryInput = document.getElementById('query-input');
     const responseBox = document.getElementById('response-box');
 
@@ -99,8 +119,7 @@
           })
           .then(responseText => {
             // Show the query and response boxes
-            queryInput.style.display = 'block';
-            responseBox.style.display = 'block';
+            queryContainer.style.display = 'block';
           })
           .catch(error => {
             responseBox.value = `Error: ${error.message}`;
@@ -133,7 +152,7 @@
               }
             })
             .then(responseText => {
-              responseBox.value += `\nQuery: ${query}\nServer Response: ${responseText}`;
+              responseBox.value = `${responseText}`;
               queryInput.value = ''; // Clear the input field
             })
             .catch(error => {
