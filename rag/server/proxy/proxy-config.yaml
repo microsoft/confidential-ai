@@ -26,6 +26,16 @@ static_resources:
                   cluster: service_wss
                   timeout: 300s
           http_filters:
+          - name: envoy.filters.http.lua
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+              inline_code: |
+                function envoy_on_response(response_handle)
+                  local file = io.open("attestation-token.txt", "r") -- open the file
+                  local content = file:read("*all") -- read the whole file
+                  file:close() -- close the file                
+                  response_handle:headers():add("X-attestation-token", content)
+                end
           - name: envoy.filters.http.router
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
