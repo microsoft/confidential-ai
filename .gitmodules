@@ -6,4 +6,4 @@
 	url = https://github.com/docker/genai-stack
 [submodule "rag/external/confidential-computing-cvm-guest-attestation"]
 	path = rag/external/confidential-computing-cvm-guest-attestation
-	url = git@github.com:Azure/confidential-computing-cvm-guest-attestation.git
+	url = https://github.com/Azure/confidential-computing-cvm-guest-attestation
