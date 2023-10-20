@@ -5,19 +5,8 @@ static_resources:
       socket_address:
         address: 0.0.0.0
         port_value: 15001
-    listener_filters:
-    - name: "envoy.filters.listener.original_dst"
-      typed_config:
-        "@type": type.googleapis.com/envoy.extensions.filters.listener.original_dst.v3.OriginalDst
-    - name: "envoy.filters.listener.http_inspector"
-      typed_config:
-        "@type": type.googleapis.com/envoy.extensions.filters.listener.http_inspector.v3.HttpInspector
-    - name: "envoy.filters.listener.tls_inspector"
-      typed_config:
-        "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector 
     filter_chains:
-    - filter_chain_match:
-      filters:
+    - filters:
       - name: envoy.filters.network.http_connection_manager
         typed_config: 
           '@type': "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
@@ -33,8 +22,9 @@ static_resources:
                   - '*'
                 routes:
                   - match: { prefix: "/"}
-                    route:
+                    route:                  
                       cluster: outbound-pass-through 
+                      timeout: 300s
           http_filters:
           - name: envoy.filters.http.dynamic_forward_proxy
             typed_config:
