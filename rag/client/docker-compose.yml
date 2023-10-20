@@ -6,7 +6,7 @@ services:
     ports:
     - 15001
     environment:
-      - MAA_ENDPOINT=sharedeus2.eus2.attest.azure.net
+      - MAA_ENDPOINT=${MAA_ENDPOINT-sharedeus2.eus2.attest.azure.net}
       - ATTESTATION_POLICY=${ATTESTATION_POLICY}
     command: [ "/bin/bash", "bootstrap.sh" ]
     privileged: true
