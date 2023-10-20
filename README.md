@@ -8,7 +8,7 @@ The samples are provided on an As-Is basis. They are work-in-progress and should
 These samples are based on several confidential computing platform components and services. 
 
 - Confidential Containers
-- Confidential GPUs
+- Confidential GPUs 
 - Microsoft Azure Attestation (MAA)
 - Azure Key Vault mHSM 
 
@@ -17,6 +17,7 @@ Samples include the following workloads.
 
 - [Confidential Inferencing](inference/README.md)
 - [Confidential Retrieval Augmented Generation](rag/README.md)
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a

@@ -1,0 +1,59 @@
+{
+  "x-ms-attestation-type": "azurevm",
+  "x-ms-azurevm-attested-pcrs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "x-ms-azurevm-bootdebug-enabled": false,
+  "x-ms-azurevm-dbvalidated": true,
+  "x-ms-azurevm-dbxvalidated": true,
+  "x-ms-azurevm-debuggersdisabled": true,
+  "x-ms-azurevm-default-securebootkeysvalidated": true,
+  "x-ms-azurevm-elam-enabled": false,
+  "x-ms-azurevm-flightsigning-enabled": false,
+  "x-ms-azurevm-hvci-policy": 0,
+  "x-ms-azurevm-hypervisordebug-enabled": false,
+  "x-ms-azurevm-is-windows": false,
+  "x-ms-azurevm-kerneldebug-enabled": false,
+  "x-ms-azurevm-osbuild": "NotApplication",
+  "x-ms-azurevm-osdistro": "Ubuntu",
+  "x-ms-azurevm-ostype": "Linux",
+  "x-ms-azurevm-osversion-major": 20,
+  "x-ms-azurevm-osversion-minor": 4,
+  "x-ms-azurevm-signingdisabled": true,
+  "x-ms-azurevm-testsigning-enabled": false,
+  "x-ms-isolation-tee": {
+    "x-ms-attestation-type": "sevsnpvm",
+    "x-ms-compliance-status": "azure-compliant-cvm",
+    "x-ms-runtime": {
+      "vm-configuration": {
+        "console-enabled": true,
+        "secure-boot": true,
+        "tpm-enabled": true,
+        "vmUniqueId": "12E52C71-6872-4DA5-B153-657A1364D62B"
+      }
+    },
+    "x-ms-sevsnpvm-bootloader-svn": 3,
+    "x-ms-sevsnpvm-familyId": "01000000000000000000000000000000",
+    "x-ms-sevsnpvm-guestsvn": 5,
+    "x-ms-sevsnpvm-hostdata": "0000000000000000000000000000000000000000000000000000000000000000",
+    "x-ms-sevsnpvm-imageId": "02000000000000000000000000000000",
+    "x-ms-sevsnpvm-is-debuggable": false,
+    "x-ms-sevsnpvm-launchmeasurement": "56755d23556da1ed62c34b046ff509b08193fb277ead7de3a8c2d028857f424ccc4da55e92a8635a0212b8460c99534a",
+    "x-ms-sevsnpvm-microcode-svn": 115,
+    "x-ms-sevsnpvm-migration-allowed": false,
+    "x-ms-sevsnpvm-reportid": "e6ec7e2514d8d458e41ab3ccc13e96db17b54b691724e560b41ee3ef48d04a60",
+    "x-ms-sevsnpvm-smt-allowed": true,
+    "x-ms-sevsnpvm-snpfw-svn": 8,
+    "x-ms-sevsnpvm-tee-svn": 0,
+    "x-ms-sevsnpvm-vmpl": 0
+  },
+  "x-ms-policy-hash": "wm9mHlvTU82e8UqoOy1Yj1FBRSNkfe99-69IYDq9eWs",
+  "x-ms-ver": "1.0"
+}
