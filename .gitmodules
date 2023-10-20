@@ -4,6 +4,3 @@
 [submodule "rag/external/genai-stack"]
 	path = rag/external/genai-stack
 	url = https://github.com/docker/genai-stack
-[submodule "rag/external/confidential-computing-cvm-guest-attestation"]
-	path = rag/external/confidential-computing-cvm-guest-attestation
-	url = https://github.com/Azure/confidential-computing-cvm-guest-attestation
