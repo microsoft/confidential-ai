@@ -13,10 +13,42 @@ export CERTIFICATE_HASH=$(openssl x509 -noout -sha256 -fingerprint -in certs/ser
 
 echo "Certficate hash $CERTIFICATE_HASH"
 
-# Generate attestation token 
-echo "Generating attestation token..."
-sudo ./confidential-computing-cvm-guest-attestation/cvm-attestation-sample-app/AttestationClient -n $CERTIFICATE_HASH -o token > ./attestation-token.txt
-cat attestation-token.txt
+# Get SNP report 
+echo "Fetching full SNP report..."
+sudo tpm2_nvread -C o 0x01400001 > snp_report.bin
+echo "Extracting guest report..."
+dd skip=32 bs=1 count=1184 if=./snp_report.bin of=./guest_report.bin
+
+# Extract HWID
+export HWID=`xxd -ps -u -s 448 -c 64 snp_report.bin | head -1`
+
+# Get cert chain
+curl "https://kdsintf.amd.com/vcek/v1/Genoa/$HWID?ucodeSPL=22&snpSPL=11&teeSPL=0&blSPL=7" --output vcek.crt
+openssl x509 -inform der -in vcek.crt -out vcek-leaf.pem
+curl "https://kdsintf.amd.com/vcek/v1/Genoa/cert_chain" > genoa.pem
+cat vcek-leaf.pem genoa.pem > vcek.pem
+
+# Construct MAA request
+base64url::encode () { base64 -w0 | tr '+/' '-_' | tr -d '='; }
+base64url::decode () { awk '{ if (length($0) % 4 == 3) print $0"="; else if (length($0) % 4 == 2) print $0"=="; else print $0; }' | tr -- '-_' '+/' | base64 -d; }
+
+export VCEK_CERT_CHAIN=`cat vcek.pem | base64url::encode`
+export GUEST_REPORT=`cat guest_report.bin | base64url::encode`
+export REPORT=`echo {} | jq '.SnpReport=env.GUEST_REPORT' | jq '.VcekCertChain=env.VCEK_CERT_CHAIN'`
+export ENCODED_REPORT=`echo $REPORT | base64 -w0`
+echo {} | jq '.report=env.ENCODED_REPORT' | jq '.nonce=env.CERTIFICATE_HASH' > request_body.json
+
+# Request token from MAA
+curl \
+  --header "Content-Type: application/json" \
+  --request POST \
+  --data @request_body.json \
+  "https://$MAA_ENDPOINT/attest/SevSnpVm?tee=SevSnpVm&api-version=2020-10-01" --output token.json
+
+echo "MAA response"
+echo `cat token.json`
+
+jq -r .token token.json > attestation-token.txt
 
 # Obtain token validation certificate
 MAA_OPENID_RESPONSE=`curl -X GET https://$MAA_ENDPOINT/.well-known/openid-configuration`

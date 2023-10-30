@@ -10,7 +10,7 @@ services:
     - "${PORT_PROXY0:-15006}:15006"
     environment:
       - MAA_ENDPOINT=sharedeus2.eus2.attest.azure.net
-    command: [ "/bin/sh", "bootstrap.sh" ]
+    command: [ "/bin/bash", "bootstrap.sh" ]
     privileged: true
     volumes:
       - /sys/kernel/security:/sys/kernel/security:rw

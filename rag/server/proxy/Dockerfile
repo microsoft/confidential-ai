@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     libboost-all-dev \
     cmake \
     nlohmann-json3-dev \
-    wget
+    wget \
+    tpm2-tools 
 
 RUN apt-get install -y git
 
