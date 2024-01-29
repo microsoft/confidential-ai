@@ -22,11 +22,12 @@ export AZURE_STORAGE_CONTAINER_NAME=
 # URL of AKV instance (without the leading https://)
 export AZURE_AKV_RESOURCE_ENDPOINT=
 
+# URL of the MAA endpoint (without leading https://)
+# Leave this empty if using policy delegation to custom MAA instance
+export AZURE_MAA_ENDPOINT=
+
 # Name of the custom MAA instance (required only if using policy delegation)
 export AZURE_MAA_CUSTOM_RESOURCE_NAME=
-
-# URL of the MAA endpoint (without leading https://)
-export AZURE_MAA_ENDPOINT=
 
 # DNS name assigned to the container group
 # Depending on the region where the container group is deployed, an appropriate suffix will be added

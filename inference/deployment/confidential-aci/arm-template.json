@@ -104,7 +104,7 @@
   "resources": [
     {
       "type": "Microsoft.ContainerInstance/containerGroups",
-      "apiVersion": "2022-04-01-preview",
+      "apiVersion": "2023-05-01",
       "name": "[parameters('name')]",
       "location": "[parameters('location')]",
       "identity": {
@@ -126,7 +126,10 @@
               "command": [
                 "/bin/sh",
                 "setup-iptables.sh"
-              ]
+              ],
+              "securityContext": {
+                "privileged": true
+              }
             }
           }
         ],
@@ -189,6 +192,9 @@
                   "cpu": 0.4,
                   "memoryInGB": 2
                 }
+              },
+              "securityContext": {
+                "privileged": true
               }
             }
           },
@@ -233,7 +239,7 @@
               ],
               "ports": [
                 {
-                  "port": 15001,
+                  "port": 15006,
                   "protocol": "TCP"
                 }
               ],
@@ -246,6 +252,7 @@
             }
           }
         ],
+        "sku": "Confidential",
         "osType": "Linux",
         "restartPolicy": "[parameters('restartPolicy')]",
         "ipAddress": {
