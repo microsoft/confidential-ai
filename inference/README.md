@@ -9,7 +9,12 @@ This sample demonstrates confidential inferencing using Confidential Containers 
 - Azure CLI
 - go 
 - jq
-- Python 3.6.9 and pip
+- Python 3.6.9 and pip (or higher)
+
+Included in the repository is a ```.devcontainer.json``` for development in VS Code dev containers. The dev container will install all dependencies. Development in GitHub Codespace is not supported. 
+
+We recommend a server/VM with at least 16 cores and 64GB RAM for running this sample. The sample involves large container images (~11GB), and the CCE policy tool requires cores and memory to download, extract, and measure hashes of layers of container images.
+
 
 ## Setup
 Clone this repository including sub-modules. 
