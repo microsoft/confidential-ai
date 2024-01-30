@@ -173,7 +173,7 @@
             "properties": {
               "image": "[concat(parameters('containerRegistry'), '/inference-encfs:latest')]",
               "command": [
-                "/encfs.sh"                
+                "/encfs.sh"
               ],
               "environmentVariables": [
                 {
