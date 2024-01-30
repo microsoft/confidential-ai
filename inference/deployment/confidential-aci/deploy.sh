@@ -4,10 +4,19 @@
 # Licensed under the MIT License.
 
 export MODEL_SIGNING_KEY=`cat ../../models/signing_public.pem | base64 -w0`
+TOOLS_HOME=${PWD}/../../external/confidential-sidecar-containers/tools
 
 echo Computing CCE policy...
 envsubst < ../../policy/policy-in-template.json > /tmp/policy-in.json
 export CCE_POLICY=$(az confcom acipolicygen -i /tmp/policy-in.json)
+echo $CCE_POLICY > /tmp/policy.rego
+echo "Server container policy hash $CCE_POLICY_HASH"
+
+pushd .
+cd $TOOLS_HOME/securitypolicydigest
+export CCE_POLICY_HASH=$(go run main.go -p $CCE_POLICY | tail --bytes=65)
+popd
+echo "Server container policy hash $CCE_POLICY_HASH"
 
 echo Generating encrypted file system information...
 export ENCRYPTED_FILESYSTEM_INFORMATION=`./generate-encrypted-filesystem-info.sh --sas | base64 --wrap=0`
