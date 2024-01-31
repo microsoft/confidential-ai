@@ -38,6 +38,7 @@ if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
     export BEARER_TOKEN=$(az account get-access-token --resource https://vault.azure.net | jq -r .accessToken)
     echo "Importing keys to AKV key vaults can be only of type RSA-HSM"
     export AZURE_AKV_KEY_TYPE="RSA-HSM"
+    export $vaultType = "vault"
 elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
     export BEARER_TOKEN=$(az account get-access-token --resource https://managedhsm.azure.net | jq -r .accessToken)    
 fi
