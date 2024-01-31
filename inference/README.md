@@ -96,7 +96,7 @@ Use the following script to encrypt models and generate an encrypted filesystem 
 ./encrypt_models.sh
 ```
 ### Upload models
-Create a storage account and blob storage containers to store your encrypted models.
+Create a storage account and blob storage containers to store your encrypted models (this is a one time step).
 ```
 ./create_storage_container.sh
 ```
