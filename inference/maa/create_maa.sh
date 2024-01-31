@@ -23,3 +23,8 @@ az deployment group create \
   --resource-group $AZURE_RESOURCE_GROUP \
   --template-file arm-template.json \
   --parameters @/tmp/maa-parameters.json
+
+# Assign RBAC roles to the resource owner so they can set policy
+MAA_SCOPE=`az attestation show -n $AZURE_MAA_CUSTOM_RESOURCE_NAME -g $AZURE_RESOURCE_GROUP --query id -o tsv`
+az role assignment create --role "Attestation Contributor" --assignee `az ad user list --query [0].id -o tsv` --scope $MAA_SCOPE
+az role assignment create --role "Attestation Reader" --assignee `az ad user list --query [0].id -o tsv` --scope $MAA_SCOPE

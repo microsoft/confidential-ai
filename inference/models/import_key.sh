@@ -13,14 +13,16 @@ done
 TOOLS_HOME=${PWD}/../external/confidential-sidecar-containers/tools
 
 # Generate container security policy to be bound to the key
+
 export MODEL_SIGNING_KEY=`cat signing_public.pem | base64 -w0`
 envsubst < ../policy/policy-in-template.json > /tmp/policy-in.json
-export CCE_POLICY=$(az confcom acipolicygen -i /tmp/policy-in.json)
 
 echo "Generating container security policy..."
+export CCE_POLICY=$(az confcom acipolicygen -i /tmp/policy-in.json)
+echo $CCE_POLICY > /tmp/policy.rego
 pushd .
 cd $TOOLS_HOME/securitypolicydigest
-export CCE_POLICY_HASH=$(go run main.go -p $CCE_POLICY | tail --bytes=64)
+export CCE_POLICY_HASH=$(go run main.go -p $CCE_POLICY | tail --bytes=65)
 popd
 echo "Server container policy hash $CCE_POLICY_HASH"
 
@@ -36,6 +38,7 @@ if [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".vault.azure.net" ]]; then
     export BEARER_TOKEN=$(az account get-access-token --resource https://vault.azure.net | jq -r .accessToken)
     echo "Importing keys to AKV key vaults can be only of type RSA-HSM"
     export AZURE_AKV_KEY_TYPE="RSA-HSM"
+    export $vaultType = "vault"
 elif [[ "$AZURE_AKV_RESOURCE_ENDPOINT" == *".managedhsm.azure.net" ]]; then
     export BEARER_TOKEN=$(az account get-access-token --resource https://managedhsm.azure.net | jq -r .accessToken)    
 fi

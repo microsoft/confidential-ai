@@ -7,7 +7,10 @@
       "command": [
         "/bin/sh",
         "setup-iptables.sh"
-      ]
+      ],
+      "securityContext": {
+        "privileged": true
+      }
     },
     {
       "containerImage": "$CONTAINER_REGISTRY/inference-server:latest",
@@ -44,7 +47,10 @@
           "mountPath": "/mnt/remote",
           "readonly": false
         }
-      ]
+      ],
+      "securityContext": {
+        "privileged": true
+      }
     },
     {
       "containerImage": "$CONTAINER_REGISTRY/inference-skr:latest",

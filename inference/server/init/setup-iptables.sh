@@ -21,13 +21,11 @@ PROXY_HEALTH_PORT=15021
 
 INBOUND_PORTS_EXCLUDE="${PROXY_HEALTH_PORT}"
 
-# Clear the iptables setup.
-iptables -t nat -F
-iptables -t nat -X
-iptables -t filter -F
-iptables -t filter -X
-
 if [ "${1:-}" = "clean" ]; then
+  iptables -t nat -F
+  iptables -t nat -X
+  iptables -t filter -F
+  iptables -t filter -X
   echo "Only cleaning, no new rules added"
   exit 0
 fi

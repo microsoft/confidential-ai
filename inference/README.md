@@ -1,6 +1,6 @@
 # Confidential Inference
 
-This sample demonstrates confidential inferencing using Confidential Containers on ACI. With confidential containers on ACI, model developers and data owners can collaborate while protecting the intellectual property of the model developer and helping keep the data used for inferencing secure and private. This sample also showcases how clients can delegate the process of verifying trustworthiness of a confidential service to an external auditors, enabling the service to be semalessly upgraded without disruption to clients. A more detailed description of the architecture and threat model can be found [here.](docs/arch.md)
+This sample demonstrates confidential inferencing using Confidential Containers on ACI. With confidential containers on ACI, model developers and data owners can collaborate while protecting the intellectual property of the model developer and helping keep the data used for inferencing secure and private. This sample also showcases how clients can delegate the process of verifying trustworthiness of a confidential service to an external auditors, enabling the service to be seamlessly upgraded without disruption to clients. A more detailed description of the architecture and threat model can be found [here.](docs/arch.md)
 
 ## Prerequisites
 - Azure subscription
@@ -9,7 +9,12 @@ This sample demonstrates confidential inferencing using Confidential Containers 
 - Azure CLI
 - go 
 - jq
-- Python 3.6.9 and pip
+- Python 3.6.9 and pip (or higher)
+
+Included in the repository is a ```.devcontainer.json``` for development in VS Code dev containers. The dev container will install all dependencies. Development in GitHub Codespace is not supported. 
+
+We recommend a server/VM with at least 16 cores and 64GB RAM for running this sample. The sample involves large container images (~11GB), and the CCE policy tool requires cores and memory to download, extract, and measure hashes of layers of container images.
+
 
 ## Setup
 Clone this repository including sub-modules. 
@@ -24,7 +29,7 @@ Next, run the script ```env.sh``` so that the environment variables are availabl
 source env.sh
 ```
 
-Login into your azure subscrption. 
+Login into your azure subscription. 
 ```
 az login
 az account set --subscription <YOUR_SUBSCRPTION_NAME>
@@ -72,7 +77,7 @@ Use the following script to sign models using fresh signing keys. This allows re
 ./sign_models.sh
 ```
 ### Generate and provision model encryption key to Azure Key Vault
-Create an Azure Key vault using the following script. If you need to create a managed hsm then you need to create it manually using the steps described [here](https://learn.microsoft.com/en-us/azure/key-vault/managed-hsm/overview).
+Create an Azure Key vault using the following script. If you need to create a managed HSM then you need to create it manually using the steps described [here](https://learn.microsoft.com/en-us/azure/key-vault/managed-hsm/overview).
 
 ```
 ./create_akv.sh
@@ -91,7 +96,7 @@ Use the following script to encrypt models and generate an encrypted filesystem 
 ./encrypt_models.sh
 ```
 ### Upload models
-Create a storage account and blob storage containers to store your encrypted models.
+Create a storage account and blob storage containers to store your encrypted models (this is a one time step).
 ```
 ./create_storage_container.sh
 ```
@@ -102,7 +107,7 @@ Upload encrypted models to storage container.
 ```
 
 ## Custom MAA endpoint deployment
-This is an optional step in case clients wish to delegate the verfication of the service's TEE configuration to an external entity such as an auditor. 
+This is an optional step in case clients wish to delegate the verification of the service's TEE configuration to an external entity such as an auditor. 
 
 Create a custom MAA instance (this is a one time step). 
 ```
@@ -123,10 +128,17 @@ Next, set the attestation policy in the custom MAA instance.
 Once the policy is configured, the MAA instance will only issue attestation tokens to service instances that meet the attestation policy. 
 
 ## Service Deployment
-Use the following script to deploy the inferencing service to ACI. 
+Use the following scripts to create a user-assigned managed identity that will be used by the container group to access resources such as Azure Key Vault and storage, and assign required permissions. 
 
 ```
 cd deployment/confidential-aci
+./create_identity.sh
+./assign_permissions.sh
+```
+
+Use the following script to deploy the inferencing service to ACI. 
+
+```
 ./deploy.sh
 ```
 When the service is deployed, the encrypted storage sidecar will 

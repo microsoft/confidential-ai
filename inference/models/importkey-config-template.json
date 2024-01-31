@@ -7,7 +7,7 @@
       },
       "akv": {
           "endpoint": "",
-          "api_version": "api-version=7.3",
+          "api_version": "api-version=7.4",
           "bearer_token": ""
       }
   },

@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/aci/ml-inference-demo-proxy:v1
 
-RUN sudo apt-get install -y gettext
+RUN sudo apt-get update && sudo apt-get install -y gettext
 
 WORKDIR "/home/envoy"
 

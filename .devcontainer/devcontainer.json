@@ -1,0 +1,14 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/universal:linux",
+	"features": {
+		"ghcr.io/devcontainers/features/azure-cli:1": {
+			"version": "latest",
+			"extensions": "confcom"
+		},
+		"ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {},
+		"ghcr.io/devcontainers-contrib/features/apt-get-packages": {
+			"packages": "cryptsetup"
+		}
+	},
+	"postCreateCommand": "pip install -r requirements.txt"
+}

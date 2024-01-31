@@ -16,7 +16,7 @@ export CCE_POLICY=$(az confcom acipolicygen -i /tmp/policy-in.json)
 
 pushd .
 cd $TOOLS_HOME/securitypolicydigest
-export CCE_POLICY_HASH=$(go run main.go -p $CCE_POLICY | tail --bytes=64)
+export CCE_POLICY_HASH=$(go run main.go -p $CCE_POLICY | tail --bytes=65)
 popd
 echo "Inference server container policy hash $CCE_POLICY_HASH"
 
